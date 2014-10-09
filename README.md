@@ -33,10 +33,10 @@ class SampleEntity
     /**
      * @XmlElementWrapper(name="number-list")
      */
-    private $number = array();
+    private $number = [];
 
 
-    public function __construct($number = array(), $nestedEntity = null, $text = "")
+    public function __construct($number = [], $nestedEntity = null, $text = "")
     {
         $this->number = $number;
         $this->nestedEntity = $nestedEntity;
@@ -88,12 +88,12 @@ class AttributeValueEntity
 
 ```php
 $sampleEntity = new SampleEntity(
-    array(1,2,3),
+    [1, 2, 3],
     new AttributeValueEntity('sample attribure', 'sample value'),
     'Sample text'
 );
 
-echo PAXB\Setup::getMarshaller()->marshall($sampleEntity, true);
+echo \PAXB\Setup::getMarshaller()->marshall($sampleEntity, true);
 ```
 
 ### Output:
@@ -116,14 +116,17 @@ echo PAXB\Setup::getMarshaller()->marshall($sampleEntity, true);
 ## Unmarshalling example
 
 ```php
-$xmlInput = '...'; //as above
-/** @var SampleEntity $sampleEntity */
-$sampleEntity = PAXB\Setup::getUnmarshaller()->unmarshall($xmlInput, 'SampleEntity');
+// content from above
+$xmlInput = '...'; 
+
+/**
+ * @var SampleEntity $sampleEntity
+ */
+$sampleEntity = \PAXB\Setup::getUnmarshaller()->unmarshall($xmlInput, 'SampleEntity');
 ```
 
 ## Running examples
 
-1. Install composer: php -r "eval('?>'.file_get_contents('https://getcomposer.org/installer'));"
-2. Install dependencies: ./composer.phar install
-3. run demo script: php demo/demo-marshall.php or php demo/demo-unmarshall.php
-
+1. Install composer: https://getcomposer.org/download/
+2. Install dependencies: composer install
+3. run demo script: "php demo/demo-marshall.php" or "php demo/demo-unmarshall.php"
