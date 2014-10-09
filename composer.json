@@ -1,5 +1,5 @@
 {
-    "name": "brandonlamb/paxbB",
+    "name": "sbuxphp/paxbB",
     "type": "library",
     "description": "Public library PAXB - PHP Annotation Xml Binding, basic implementation of annotation driven xml binding",
     "keywords": ["xml", "binding", "marshalling"],
