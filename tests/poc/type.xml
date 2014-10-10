@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<type>
+  <id>123</id>
+  <name>Full Physical</name>
+  <isBatchable>true</isBatchable>
+  <checkPhysical>true</checkPhysical>
+  <checkReceiptDate>false</checkReceiptDate>
+  <isIncludedInHistory>true</isIncludedInHistory>
+  <isForceToZeroAllowed>true</isForceToZeroAllowed>
+  <isSuppressAllowed>false</isSuppressAllowed>
+  <isExcludeAllowed>false</isExcludeAllowed>
+  <referenceCode></referenceCode>
+  <batchPriority>0</batchPriority>
+</type>
