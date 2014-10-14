@@ -80,7 +80,7 @@ class DOMDocumentMarshaller implements MarshallerInterface
     /**
      * @param mixed $object
      * @param \PAXB\Xml\Binding\Metadata\Metadata $metadata
-     * @param \DOMElement  $element
+     * @param \DOMElement $element
      * @throws Exception
      */
     private function processAttributes($object, $metadata, $element)

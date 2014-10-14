@@ -15,7 +15,6 @@ use PAXB\Xml\Binding\Structure\Element;
 class AnnotationLoader
 {
     const ANNOTATIONS_NAMESPACE = 'PAXB\Xml\Binding\Annotations';
-
     const MODE_EMPTY     = 'DEFAULT';
     const MODE_ELEMENT   = 'ELEMENT';
     const MODE_ATTRIBUTE = 'ATTRIBUTE';
@@ -37,8 +36,8 @@ class AnnotationLoader
      */
     public function loadClassMetadata(Metadata $metadata)
     {
-        $metadata = $this->processClassAnnotations($metadata);
-        $metadata = $this->processFieldsMetadata($metadata);
+        $this->processClassAnnotations($metadata);
+        $this->processPropertyAnnotations($metadata);
 
         return $metadata;
     }
@@ -83,7 +82,7 @@ class AnnotationLoader
      * @return \PAXB\Xml\Binding\Metadata\Metadata
      * @throws \Doctrine\Common\Annotations\AnnotationException
      */
-    private function processFieldsMetadata(Metadata $metadata)
+    private function processPropertyAnnotations(Metadata $metadata)
     {
 #d(__METHOD__, $metadata->getReflection()->getProperties());
 
@@ -97,7 +96,6 @@ print_r($annotations);
 
             if (is_array($annotations)) {
                 foreach ($annotations as &$annotation) {
-
                     switch (get_class($annotation)) {
                         case 'var':
                             d(__METHOD__, __LINE__, $annotation);
