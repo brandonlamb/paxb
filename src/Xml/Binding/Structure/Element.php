@@ -2,7 +2,7 @@
 
 namespace PAXB\Xml\Binding\Structure;
 
-use PAXB\Xml\Binding\Metadata\ClassMetadata;
+use PAXB\Xml\Binding\Metadata\Metadata;
 
 class Element extends Base
 {
@@ -26,7 +26,7 @@ class Element extends Base
      */
     private $phpCollection = false;
 
-    public function __construct($name, $source, $type = ClassMetadata::RUNTIME_TYPE, $typeValue = '', $wrapperName = null, $phpCollection = false)
+    public function __construct($name, $source, $type = Metadata::RUNTIME_TYPE, $typeValue = '', $wrapperName = null, $phpCollection = false)
     {
         $this->name = $name;
         $this->type = $type;
@@ -49,7 +49,7 @@ class Element extends Base
      */
     public function getTypeValue()
     {
-        return $this->typeValue;
+        return (string) $this->typeValue;
     }
 
     /**
@@ -65,7 +65,7 @@ class Element extends Base
      */
     public function setWrapperName($wrapperName)
     {
-        $this->wrapperName = $wrapperName;
+        $this->wrapperName = (string) $wrapperName;
     }
 
     /**
@@ -73,8 +73,8 @@ class Element extends Base
      */
     public function setTypeValue($typeValue)
     {
-        $this->type = ClassMetadata::DEFINED_TYPE;
-        $this->typeValue = $typeValue;
+        $this->type = Metadata::DEFINED_TYPE;
+        $this->typeValue = (string) $typeValue;
     }
 
     /**
@@ -82,7 +82,7 @@ class Element extends Base
      */
     public function setPhpCollection($phpCollection)
     {
-        $this->phpCollection = $phpCollection;
+        $this->phpCollection = (bool) $phpCollection;
     }
 
     /**
@@ -90,6 +90,6 @@ class Element extends Base
      */
     public function getPhpCollection()
     {
-        return $this->phpCollection;
+        return (bool) $this->phpCollection;
     }
 }

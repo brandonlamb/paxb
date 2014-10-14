@@ -1,6 +1,6 @@
 <?php
 
-namespace PAXB\Xml\Marshalling;
+namespace PAXB\Xml\Unmarshall;
 
 use PAXB\Xml\Binding\Metadata\ClassMetadata;
 use PAXB\Xml\Binding\Metadata\ClassMetadataFactory;
@@ -8,7 +8,7 @@ use PAXB\Xml\Binding\Structure\Attribute;
 use PAXB\Xml\Binding\Structure\Base;
 use PAXB\Xml\Binding\Structure\Element;
 
-class DOMDocumentUnmarshaller implements Unmarshaller
+class DOMDocumentUnmarshaller implements UnmarshallerInterface
 {
     /**
      * @var ClassMetadataFactory
@@ -37,7 +37,7 @@ class DOMDocumentUnmarshaller implements Unmarshaller
         $rootElementName = $classMetadata->getName();
 
         if ($document->childNodes->item(0)->nodeName !== $rootElementName) {
-            throw new UnmarshallingException('Cannot found root element: '.$rootElementName);
+            throw new Exception('Cannot found root element: '.$rootElementName);
         }
 
         return $this->unmarshallObject($document->childNodes->item(0), $this->getNewEntity($classMetadata), $classMetadata);
@@ -61,14 +61,14 @@ class DOMDocumentUnmarshaller implements Unmarshaller
      * @param \DOMElement $node
      * @param mixed $object
      * @param ClassMetadata $classMetadata
-     * @throws UnmarshallingException
+     * @throws Exception
      */
     private function processAttributes(\DOMElement $node, $object, ClassMetadata $classMetadata)
     {
         /** @var Attribute $attribute */
         foreach ($classMetadata->getAttributes() as $fieldName => $attribute) {
             if (!$node->hasAttribute($attribute->getName())) {
-                throw new UnmarshallingException('Cannot found attribute ' . $attribute->getName(
+                throw new Exception('Cannot found attribute ' . $attribute->getName(
                 ) . ' of node ' . $classMetadata->getName());
             }
 
@@ -85,7 +85,7 @@ class DOMDocumentUnmarshaller implements Unmarshaller
      * @param \DOMElement $node
      * @param ClassMetadata $classMetadata
      * @param mixed $object
-     * @throws UnmarshallingException
+     * @throws Exception
      */
     private function processElements(\DOMElement $node, ClassMetadata $classMetadata, $object)
     {
@@ -103,7 +103,7 @@ echo __METHOD__ . ':' . __LINE__ . ": wrapperName: $wrapperName\n";
                 if ($this->hasChild($node, $wrapperName)) {
                     $wrappers = $this->filterChildNodes($node, $wrapperName);
                     if (count($wrappers) > 1) {
-                        throw new UnmarshallingException('Found not unique wprappers ' . $wrapperName . ' inside ' . $node->nodeName);
+                        throw new Exception('Found not unique wprappers ' . $wrapperName . ' inside ' . $node->nodeName);
                     }
 
                     $childNodes = $this->filterChildNodes($wrappers[0], $element->getName());
@@ -212,7 +212,7 @@ echo __METHOD__ . ':' . __LINE__ . "\n";
      * @param Element $element
      * @param \DOMElement $child
      * @return mixed
-     * @throws UnmarshallingException
+     * @throws Exception
      */
     private function getNodeElementValue($element, $child)
     {
@@ -280,13 +280,13 @@ echo __METHOD__ . ':' . __LINE__ . ": fieldValue: $fieldValue\n";
      * @param string $elementName
      * @param \DOMElement $child
      * @return mixed
-     * @throws UnmarshallingException
+     * @throws Exception
      */
     private function getScalarValueFromNode($elementName, $child)
     {
         if ($child->hasChildNodes()) {
             if (count($child->childNodes)>1 || !($child->childNodes->item(0) instanceof \DOMText)) {
-                throw new UnmarshallingException('Cannot unmarshal scalar ' . $elementName . ' as object');
+                throw new Exception('Cannot unmarshal scalar ' . $elementName . ' as object');
             }
         }
         $fieldValue = $child->textContent;

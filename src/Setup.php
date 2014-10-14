@@ -5,11 +5,15 @@ namespace PAXB;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\SimpleAnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Cache\ApcCache;
 use Doctrine\Common\Cache\Cache;
+
 use PAXB\Xml\Binding\AnnotationLoader;
-use PAXB\Xml\Binding\Metadata\ClassMetadataFactory;
-use PAXB\Xml\Marshalling\Marshaller;
-use PAXB\Xml\Marshalling\Unmarshaller;
+use PAXB\Xml\Binding\Metadata\MetadataFactory;
+use PAXB\Xml\Marshall\DOMDocumentMarshaller;
+use PAXB\Xml\Marshall\Marshaller;
+use PAXB\Xml\Unmarshall\DOMDocumentUnmarshaller;
+use PAXB\Xml\Unmarshall\Unmarshaller;
 
 /**
  * This class is using only for demo purposes, i highly recommend using DI (ie. Symfony2 container)
@@ -17,9 +21,9 @@ use PAXB\Xml\Marshalling\Unmarshaller;
 class Setup
 {
     /**
-     * @var ClassMetadataFactory
+     * @var \PAXB\Xml\Binding\Metadata\MetadataFactoryInterface
      */
-    private static $classMetadataFactory;
+    private static $metadataFactory;
 
     /**
      * @var Marshaller
@@ -37,8 +41,8 @@ class Setup
     public static function getMarshaller()
     {
         if (self::$marshaller == null) {
-            self::$marshaller = new \PAXB\Xml\Marshalling\DOMDocumentMarshaller(
-                self::getClassMetadataFactory()
+            self::$marshaller = new DOMDocumentMarshaller(
+                self::getMetadataFactory()
             );
         }
 
@@ -51,8 +55,8 @@ class Setup
     public static function getUnmarshaller()
     {
         if (self::$unmarshaller == null) {
-            self::$unmarshaller = new \PAXB\Xml\Marshalling\DOMDocumentUnmarshaller(
-                self::getClassMetadataFactory()
+            self::$unmarshaller = new DOMDocumentUnmarshaller(
+                self::getMetadataFactory()
             );
         }
 
@@ -60,30 +64,22 @@ class Setup
     }
 
     /**
-     * @return ClassMetadataFactory
+     * @return \PAXB\Xml\Binding\Metadata\MetadataFactory
      */
-    public static function getClassMetadataFactory()
+    public static function getMetadataFactory()
     {
-        if (self::$classMetadataFactory == null) {
+        if (self::$metadataFactory == null) {
             $reader = new SimpleAnnotationReader();
             self::loadAnnotationFiles($reader);
-            self::$classMetadataFactory = new \PAXB\Xml\Binding\Metadata\CachedClassMetadataFactory(
-                new \PAXB\Xml\Binding\Metadata\BaseClassMetadataFactory(
-                    new \PAXB\Xml\Binding\AnnotationLoader($reader)
-                ),
-                self::getCache()
+
+            self::$metadataFactory = new MetadataFactory(
+                new AnnotationLoader($reader),
+                #new ApcCache()
+                new ArrayCache
             );
         }
 
-        return self::$classMetadataFactory;
-    }
-
-    /**
-     * @return Cache
-     */
-    private static function getCache()
-    {
-        return new ArrayCache();
+        return self::$metadataFactory;
     }
 
     /**

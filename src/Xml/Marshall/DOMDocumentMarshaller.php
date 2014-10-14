@@ -1,26 +1,26 @@
 <?php
 
-namespace PAXB\Xml\Marshalling;
+namespace PAXB\Xml\Marshall;
 
-use PAXB\Xml\Binding\Metadata\ClassMetadata;
-use PAXB\Xml\Binding\Metadata\ClassMetadataFactory;
+use PAXB\Xml\Binding\Metadata\Metadata;
+use PAXB\Xml\Binding\Metadata\MetadataFactoryInterface;
 use PAXB\Xml\Binding\Structure\Attribute;
 use PAXB\Xml\Binding\Structure\Base;
 use PAXB\Xml\Binding\Structure\Element;
 
-class DOMDocumentMarshaller
+class DOMDocumentMarshaller implements MarshallerInterface
 {
     /**
-     * @var ClassMetadataFactory
+     * @var \PAXB\Xml\Binding\Metadata\MetadataFactoryInterface
      */
-    private $classMetadataFactory;
+    private $metadataFactory;
 
     /**
-     * @param ClassMetadataFactory $classMetadataFactory
+     * @param \PAXB\Xml\Binding\Metadata\MetadataFactory $metadataFactory
      */
-    public function __construct(ClassMetadataFactory $classMetadataFactory)
+    public function __construct(MetadataFactoryInterface $metadataFactory)
     {
-        $this->classMetadataFactory = $classMetadataFactory;
+        $this->metadataFactory = $metadataFactory;
     }
 
     /**
@@ -43,21 +43,30 @@ class DOMDocumentMarshaller
      * @param \DOMElement $parent
      * @param string $parentLevelName
      * @return \DOMDocument
-     * @throws MarshallingException
+     * @throws Exception
      */
     private function marshallObject(\DOMDocument $document, $object, $parent = null, $parentLevelName = null)
     {
         if (!is_object($object)) {
-            throw new MarshallingException('Cannot marshall primitive types or arrays');
+            throw new Exception('Cannot marshall primitive types or arrays');
         }
 
-        $classMetadata = $this->classMetadataFactory->getClassMetadata(get_class($object));
-        $elementName = is_null($parentLevelName) ? $classMetadata->getName() : $parentLevelName;
-        $element  = $document->createElement($elementName);
+        $metadata = $this->metadataFactory->getClassMetadata(get_class($object));
+#d(__METHOD__, $metadata);
 
-        $this->processAttributes($object, $classMetadata, $element);
-        $this->processSubElements($document, $object, $classMetadata, $element);
-        $this->processValueElement($document, $object, $classMetadata, $element);
+        $rootElementName = is_null($parentLevelName) ? $metadata->getName() : $parentLevelName;
+#d(__METHOD__, $rootElementName);
+
+        $element  = $document->createElement($rootElementName);
+#d(__METHOD__, __LINE__, $element);
+
+        $this->processAttributes($object, $metadata, $element);
+ #d(__METHOD__, __LINE__, $element);
+
+        $this->processSubElements($document, $object, $metadata, $element);
+ d(__METHOD__, __LINE__, $element);
+
+        $this->processValueElement($document, $object, $metadata, $element);
 
         if ($parent == null) {
             $document->appendChild($element);
@@ -69,53 +78,76 @@ class DOMDocumentMarshaller
     }
 
     /**
-     * @param \DOMDocument $document
      * @param mixed $object
-     * @param ClassMetadata $classMetadata
-     * @param \DOMElement $element
-     * @throws MarshallingException
-     */
-    private function processValueElement(\DOMDocument $document, $object, $classMetadata, $element)
-    {
-        $valueElement = $classMetadata->getValueElement();
-        if (!empty($valueElement)) {
-            $property = $classMetadata->getReflection()->getProperty($valueElement);
-            $property->setAccessible(true);
-            $value = $property->getValue($object);
-
-            if (!is_scalar($value)) {
-                throw new MarshallingException(
-                    'Cannot marshall field ' . $classMetadata->getValueElement() . ' as text node is not scalar'
-                );
-            }
-            $textNode = $document->createTextNode($value);
-            $element->appendChild($textNode);
-        }
-    }
-
-    /**
-     * @param mixed $object
-     * @param ClassMetadata $classMetadata
+     * @param \PAXB\Xml\Binding\Metadata\Metadata $metadata
      * @param \DOMElement  $element
-     * @throws MarshallingException
+     * @throws Exception
      */
-    private function processAttributes($object, $classMetadata, $element)
+    private function processAttributes($object, $metadata, $element)
     {
         /** @var Attribute $attributeMetadata */
-        foreach ($classMetadata->getAttributes() as $propertyName => $attributeMetadata) {
+        foreach ($metadata->getAttributes() as $propertyName => $attributeMetadata) {
             $attributeValue = $this->getPropertyValue(
-                $classMetadata->getReflection()->getProperty($propertyName),
+                $metadata->getReflection()->getProperty($propertyName),
                 $attributeMetadata,
                 $object
             );
 
             if (!is_scalar($attributeValue)) {
-                throw new MarshallingException(
+                throw new Exception(
                     'Cannot marshall field ' . $attributeMetadata->getName() . ' as attribute, value is not scalar'
                 );
             }
+#d(__METHOD__, __LINE__, $attributeValue);
 
             $element->setAttribute($attributeMetadata->getName(), $attributeValue);
+        }
+    }
+
+    /**
+     * @param \DOMDocument $document
+     * @param mixed $object
+     * @param \PAXB\Xml\Binding\Metadata\Metadata $metadata
+     * @param \DOMNode $element
+     */
+    private function processSubElements(\DOMDocument $document, $object, $metadata, $element)
+    {
+        /** @var Element $elementMetadata */
+        foreach ($metadata->getElements() as $propertyName => $elementMetadata) {
+            $elementValue = $this->getPropertyValue(
+                $metadata->getReflection()->getProperty($propertyName),
+                $elementMetadata,
+                $object
+            );
+d(__METHOD__, __LINE__, $elementValue);
+
+            $this->checkTypeHinting($elementMetadata, $elementValue);
+            $this->createAndAppendChild($document, $elementValue, $elementMetadata, $element);
+        }
+    }
+
+    /**
+     * @param \DOMDocument $document
+     * @param mixed $object
+     * @param \PAXB\Xml\Binding\Metadata\Metadata $metadata
+     * @param \DOMElement $element
+     * @throws Exception
+     */
+    private function processValueElement(\DOMDocument $document, $object, $metadata, $element)
+    {
+        $valueElement = $metadata->getValueElement();
+        if (!empty($valueElement)) {
+            $property = $metadata->getReflection()->getProperty($valueElement);
+            $property->setAccessible(true);
+            $value = $property->getValue($object);
+
+            if (!is_scalar($value)) {
+                throw new Exception(
+                    'Cannot marshall field ' . $metadata->getValueElement() . ' as text node is not scalar'
+                );
+            }
+            $textNode = $document->createTextNode($value);
+            $element->appendChild($textNode);
         }
     }
 
@@ -137,30 +169,9 @@ class DOMDocumentMarshaller
     }
 
     /**
-     * @param \DOMDocument $document
-     * @param mixed $object
-     * @param ClassMetadata $classMetadata
-     * @param \DOMNode $element
-     */
-    private function processSubElements(\DOMDocument $document, $object, $classMetadata, $element)
-    {
-        /** @var Element $elementMetadata */
-        foreach ($classMetadata->getElements() as $propertyName => $elementMetadata) {
-            $elementValue = $this->getPropertyValue(
-                $classMetadata->getReflection()->getProperty($propertyName),
-                $elementMetadata,
-                $object
-            );
-
-            $this->checkTypeHinting($elementMetadata, $elementValue);
-            $this->createAndAppendChild($document, $elementValue, $elementMetadata, $element);
-        }
-    }
-
-    /**
-     * @param Element              $elementMetadata
-     * @param mixed                $elementValue
-     * @throws MarshallingException
+     * @param Element $elementMetadata
+     * @param mixed $elementValue
+     * @throws Exception
      */
     private function checkTypeHinting(Element $elementMetadata, $elementValue)
     {
@@ -172,9 +183,9 @@ class DOMDocumentMarshaller
             $elementValue = $nestedValue;
 
         }
-        if ($elementMetadata->getType() == ClassMetadata::DEFINED_TYPE && !empty($elementValue)) {
+        if ($elementMetadata->getType() == Metadata::DEFINED_TYPE && !empty($elementValue)) {
             if (!is_object($elementValue) || get_class($elementValue) !== $elementMetadata->getTypeValue()) {
-                throw new MarshallingException(
+                throw new Exception(
                     'Cannot marshall field ' . $elementMetadata->getName(
                     ) . ' as type ' . $elementMetadata->getTypeValue(). ' founded type is: '.get_class($elementValue)
                 );
@@ -218,7 +229,7 @@ class DOMDocumentMarshaller
         if (is_object($elementValue)) {
             $this->marshallObject($document, $elementValue, $element, $elementMetadata->getName());
         } else {
-            if ($elementMetadata->getType() == ClassMetadata::RUNTIME_TYPE) {
+            if ($elementMetadata->getType() == Metadata::RUNTIME_TYPE) {
                 $nestedElement = $document->createElement($elementMetadata->getName());
                 $textElement   = $document->createTextNode($elementValue);
                 $nestedElement->appendChild($textElement);

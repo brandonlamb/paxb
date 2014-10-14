@@ -4,7 +4,7 @@ namespace PAXB\Xml\Binding\Metadata;
 
 use PAXB\Xml\Binding\Structure\Element;
 
-class ClassMetadata
+class Metadata
 {
     const RUNTIME_TYPE   = 1;
     const DEFINED_TYPE   = 2;
@@ -32,19 +32,19 @@ class ClassMetadata
     /**
      * @var string
      */
-    private $valueElement = '';
+    private $valueElement;
 
     /**
      * @var \ReflectionClass
      */
-    private $reflection = null;
+    private $reflection;
 
     /**
      * @param string $className
      */
     public function __construct($className)
     {
-        $this->className = $className;
+        $this->className = trim($className);
     }
 
     /**
@@ -52,7 +52,7 @@ class ClassMetadata
      */
     public function getAttributes()
     {
-        return $this->attributes;
+        return (array) $this->attributes;
     }
 
     /**
@@ -60,7 +60,7 @@ class ClassMetadata
      */
     public function getClassName()
     {
-        return $this->className;
+        return (string) $this->className;
     }
 
     /**
@@ -68,7 +68,7 @@ class ClassMetadata
      */
     public function getName()
     {
-        return $this->name;
+        return (string) $this->name;
     }
 
     /**
@@ -84,7 +84,7 @@ class ClassMetadata
      */
     public function getValueElement()
     {
-        return $this->valueElement;
+        return (string) $this->valueElement;
     }
 
     /**
@@ -92,7 +92,7 @@ class ClassMetadata
      */
     public function getReflection()
     {
-        if (is_null($this->reflection)) {
+        if (null === $this->reflection) {
             $this->reflection = new \ReflectionClass($this->className);
         }
 
@@ -100,21 +100,21 @@ class ClassMetadata
     }
 
     /**
-     * @param string                                $fieldName
+     * @param string $fieldName
      * @param \PAXB\Xml\Binding\Structure\Attribute $attribute
      */
     public function addAttributes($fieldName, $attribute)
     {
-        $this->attributes[$fieldName] = $attribute;
+        $this->attributes[(string) $fieldName] = $attribute;
     }
 
     /**
-     * @param string                              $fieldName
+     * @param string $fieldName
      * @param \PAXB\Xml\Binding\Structure\Element $element
      */
     public function addElement($fieldName, $element)
     {
-        $this->elements[$fieldName] = $element;
+        $this->elements[(string) $fieldName] = $element;
     }
 
     /**
@@ -122,7 +122,7 @@ class ClassMetadata
      */
     public function setName($name)
     {
-        $this->name = $name;
+        $this->name = trim($name);
     }
 
     /**
@@ -130,6 +130,6 @@ class ClassMetadata
      */
     public function setValueElement($valueElement)
     {
-        $this->valueElement = $valueElement;
+        $this->valueElement = trim($valueElement);
     }
 }

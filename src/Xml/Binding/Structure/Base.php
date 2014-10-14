@@ -11,19 +11,19 @@ class Base
     protected $source;
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getName()
     {
-        return $this->name;
+        return (string) $this->name;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getSource()
     {
-        return $this->source;
+        return (int) $this->source;
     }
 
     /**
@@ -31,7 +31,7 @@ class Base
      */
     public function setName($name)
     {
-        $this->name = $name;
+        $this->name = (string) $name;
     }
 
     /**
@@ -39,6 +39,6 @@ class Base
      */
     public function setSource($source)
     {
-        $this->source = $source;
+        $this->source = (int) $source;
     }
 }

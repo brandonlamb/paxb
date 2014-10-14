@@ -15,5 +15,5 @@ class XmlElement extends XmlAnnotation
     /**
      * @var string
      */
-    public $type = '';
+    public $type;
 }

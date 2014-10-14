@@ -2,11 +2,11 @@
 
 namespace PAXB\Xml\Binding\Metadata;
 
-interface ClassMetadataFactory
+interface MetadataFactoryInterface
 {
     /**
      * @param string $className
-     * @return ClassMetadata
+     * @return \PAXB\Xml\Binding\Metadata\Metadata
      */
     public function getClassMetadata($className);
 }

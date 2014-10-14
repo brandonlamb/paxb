@@ -6,7 +6,7 @@ class Attribute extends Base
 {
     public function __construct($name, $source)
     {
-        $this->name = $name;
-        $this->source = $source;
+        $this->name = (string) $name;
+        $this->source = (int) $source;
     }
 }
