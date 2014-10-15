@@ -12,9 +12,4 @@ class XmlRootElement extends XmlAnnotation
      * @var string
      */
     public $name;
-
-    /**
-     * @var string
-     */
-    public $type;
 }

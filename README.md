@@ -5,6 +5,8 @@ PAXB - very basic implementation of annotation driven xml binding
 ## Supported annotations
 
 This lib supports listed bellow annotations:
+
+- XmlRootElement(name="")
 - XmlAttribute(name="")
 - XmlElement(name="", type="") - type is required for unmarshaling fields containing objects
 - XmlElementWrapper(name) - name required
@@ -19,7 +21,7 @@ Sample code
 
 ```php
 /**
- * @XmlElement(name="root")
+ * @XmlRootElement(name="root")
  */
 class SampleEntity
 {
@@ -43,7 +45,9 @@ class SampleEntity
         $this->text = $text;
     }
 }
+```
 
+```php
 class AttributeValueEntity
 {
     /**
@@ -117,7 +121,7 @@ echo \PAXB\Setup::getMarshaller()->marshall($sampleEntity, true);
 
 ```php
 // content from above
-$xmlInput = '...'; 
+$xmlInput = '...';
 
 /**
  * @var SampleEntity $sampleEntity

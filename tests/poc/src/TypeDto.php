@@ -11,7 +11,7 @@
 namespace Api;
 
 /**
- * @XmlElement(name="type")
+ * @XmlRootElement(name="type")
  */
 class TypeDto extends AbstractDto
 {

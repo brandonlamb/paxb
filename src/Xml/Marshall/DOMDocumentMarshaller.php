@@ -64,7 +64,7 @@ class DOMDocumentMarshaller implements MarshallerInterface
  #d(__METHOD__, __LINE__, $element);
 
         $this->processSubElements($document, $object, $metadata, $element);
- d(__METHOD__, __LINE__, $element);
+ #d(__METHOD__, __LINE__, $element);
 
         $this->processValueElement($document, $object, $metadata, $element);
 
@@ -119,7 +119,7 @@ class DOMDocumentMarshaller implements MarshallerInterface
                 $elementMetadata,
                 $object
             );
-d(__METHOD__, __LINE__, $elementValue);
+#d(__METHOD__, __LINE__, $elementValue);
 
             $this->checkTypeHinting($elementMetadata, $elementValue);
             $this->createAndAppendChild($document, $elementValue, $elementMetadata, $element);
@@ -141,6 +141,10 @@ d(__METHOD__, __LINE__, $elementValue);
             $property->setAccessible(true);
             $value = $property->getValue($object);
 
+            if (is_bool($value)) {
+                $value = $value ? 'true' : 'false';
+            }
+
             if (!is_scalar($value)) {
                 throw new Exception(
                     'Cannot marshall field ' . $metadata->getValueElement() . ' as text node is not scalar'
@@ -161,11 +165,16 @@ d(__METHOD__, __LINE__, $elementValue);
     {
         if ($baseMetadata->getSource() == Base::FIELD_SOURCE) {
             $property->setAccessible(true);
-
-            return $property->getValue($object);
+            $value = $property->getValue($object);
         } else {
-            return $object->{'get'.ucfirst($property->getName())}();
+            $value = $object->{'get' . ucfirst($property->getName())}();
         }
+
+        if (is_bool($value)) {
+            $value = $value ? 'true' : 'false';
+        }
+
+        return $value;
     }
 
     /**
@@ -187,7 +196,7 @@ d(__METHOD__, __LINE__, $elementValue);
             if (!is_object($elementValue) || get_class($elementValue) !== $elementMetadata->getTypeValue()) {
                 throw new Exception(
                     'Cannot marshall field ' . $elementMetadata->getName(
-                    ) . ' as type ' . $elementMetadata->getTypeValue(). ' founded type is: '.get_class($elementValue)
+                    ) . ' as type ' . $elementMetadata->getTypeValue(). ' founded type is: ' . get_class($elementValue)
                 );
             }
         }

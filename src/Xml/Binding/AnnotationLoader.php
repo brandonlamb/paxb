@@ -2,6 +2,7 @@
 
 namespace PAXB\Xml\Binding;
 
+use ReflectionProperty;
 use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\Common\Annotations\Reader;
 use PAXB\Xml\Binding\Annotations\XmlAnnotation;
@@ -26,6 +27,11 @@ class AnnotationLoader
      */
     private $reader;
 
+    /**
+     * Annotation loader constructor
+     *
+     * @param \Doctrine\Common\Annotations\Reader $reader
+     */
     public function __construct(Reader $reader)
     {
         $this->reader = $reader;
@@ -33,13 +39,35 @@ class AnnotationLoader
 
     /**
      * @param \PAXB\Xml\Binding\Metadata\Metadata $metadata
+     * @return \PAXB\Xml\Binding\Metadata\Metadata
      */
     public function loadClassMetadata(Metadata $metadata)
     {
         $this->processClassAnnotations($metadata);
+        #$this->processMethodAnnotations($metadata);
         $this->processPropertyAnnotations($metadata);
 
         return $metadata;
+    }
+
+    /**
+     * @param \ReflectionProperty $property
+     * @return \PAXB\Xml\Binding\Structure\Element
+     */
+    public function getDefaultElement(ReflectionProperty $property)
+    {
+        return new Element($property->getName(), Element::FIELD_SOURCE);
+    }
+
+    /**
+     * @param \PAXB\Xml\Binding\Structure\Element $element
+     * @param \ReflectionProperty $property
+     * @return \PAXB\Xml\Binding\Structure\Element
+     */
+    public function getCurrentElement($element, ReflectionProperty $property)
+    {
+        null === $element && $element = $this->getDefaultElement($property);
+        return $element;
     }
 
     /**
@@ -55,22 +83,21 @@ class AnnotationLoader
         // set default name
         $metadata->setName(end($classTokens));
 
-        if (is_array($annotations)) {
-            foreach ($annotations as &$annotation) {
-                switch (get_class($annotation)) {
-                    case 'PAXB\Xml\Binding\Annotations\XmlElement':
-                        // @var \PAXB\Xml\Binding\Annotations\XmlElement $annotation
-                        !empty($annotation->name) && $metadata->setName($annotation->name);
-                        break;
+        foreach ($annotations as &$annotation) {
+            $className = get_class($annotation);
+            switch ($className) {
+                case 'PAXB\Xml\Binding\Annotations\XmlRootElement':
+                    // @var \PAXB\Xml\Binding\Annotations\XmlRootElement $annotation
+                    !empty($annotation->name) && $metadata->setName($annotation->name);
+                    break;
 
-                    default:
-                        if ($annotation instanceof XmlAnnotation) {
-                            throw AnnotationException::semanticalError(
-                                get_class($annotation) . ' not expected as class annotation'
-                            );
-                        }
-                        break;
-                }
+                default:
+                    if ($annotation instanceof XmlAnnotation) {
+                        throw AnnotationException::semanticalError(
+                            $className . ' not expected as class annotation'
+                        );
+                    }
+                    break;
             }
         }
 
@@ -92,67 +119,79 @@ class AnnotationLoader
             $state = self::MODE_EMPTY;
 
             $annotations = $this->reader->getPropertyAnnotations($property);
-print_r($annotations);
+#print_r($annotations);
 
-            if (is_array($annotations)) {
-                foreach ($annotations as &$annotation) {
-                    switch (get_class($annotation)) {
-                        case 'var':
-                            d(__METHOD__, __LINE__, $annotation);
+            foreach ($annotations as &$annotation) {
+                $className = get_class($annotation);
+                switch ($className) {
+                    case 'var':
+                        d(__METHOD__, __LINE__, $annotation);
 
-                        case 'PAXB\Xml\Binding\Annotations\XmlElement':
-                            $state = $this->changeMode($state, self::MODE_ELEMENT);
-                            $element = $this->processElementAnnotation($element, $property, $annotation);
-                            $metadata->addElement($property->getName(), $element);
-                            break;
+                    case 'PAXB\Xml\Binding\Annotations\XmlElement':
+                        $state = $this->changeMode($state, self::MODE_ELEMENT);
+                        $element = $this->processElementAnnotation(
+                            $this->getCurrentElement($element, $property),
+                            $property,
+                            $annotation
+                        );
+                        $metadata->addElement($property->getName(), $element);
+                        break;
 
-                        case 'PAXB\Xml\Binding\Annotations\XmlElementWrapper':
-                            $state = $this->changeMode($state, self::MODE_ELEMENT);
-                            $element = $this->processElementWrapperAnnotation($annotation, $element, $property);
-                            $metadata->addElement($property->getName(), $element);
-                            break;
+                    case 'PAXB\Xml\Binding\Annotations\XmlElementWrapper':
+                        $state = $this->changeMode($state, self::MODE_ELEMENT);
+                        $element = $this->processElementWrapperAnnotation(
+                            $this->getCurrentElement($element, $property),
+                            $property,
+                            $annotation
+                        );
+                        $metadata->addElement($property->getName(), $element);
+                        break;
 
-                        case 'PAXB\Xml\Binding\Annotations\XmlPhpCollection':
-                            $state = $this->changeMode($state, self::MODE_ELEMENT);
-                            $element = $this->getCurrentElement($element, $property);
-                            $element->setPhpCollection(true);
-                            $metadata->addElement($property->getName(), $element);
-                            break;
+                    case 'PAXB\Xml\Binding\Annotations\XmlPhpCollection':
+                        $state = $this->changeMode($state, self::MODE_ELEMENT);
+                        $element = $this->getCurrentElement($element, $property);
+                        $element->setPhpCollection(true);
+                        $metadata->addElement($property->getName(), $element);
+                        break;
 
-                        case 'PAXB\Xml\Binding\Annotations\XmlTransient':
-                            $state = $this->changeMode($state, self::MODE_TRANSIENT);
-                            break;
+                    case 'PAXB\Xml\Binding\Annotations\XmlTransient':
+                        $state = $this->changeMode($state, self::MODE_TRANSIENT);
+                        break;
 
-                        case 'PAXB\Xml\Binding\Annotations\XmlAttribute':
-                            $state = $this->changeMode($state, self::MODE_TRANSIENT);
-                            $attribute = $this->processAttribute($property, $annotation);
-                            $metadata->addAttributes($property->getName(), $attribute);
-                            break;
+                    case 'PAXB\Xml\Binding\Annotations\XmlAttribute':
+                        $state = $this->changeMode($state, self::MODE_TRANSIENT);
+                        $attribute = $this->processAttribute($property, $annotation);
+                        $metadata->addAttributes($property->getName(), $attribute);
+                        break;
 
-                        case 'PAXB\Xml\Binding\Annotations\XmlValue':
-                            $state = $this->changeMode($state, self::MODE_TRANSIENT);
-                            $currentValue = $metadata->getValueElement();
-                            if (!empty($currentValue)) {
-                                throw AnnotationException::semanticalError(
-                                    'Cannot set more than one field of complex element as XmlValue'
-                                );
-                            }
-                            $metadata->setValueElement($property->getName());
-                            break;
+                    case 'PAXB\Xml\Binding\Annotations\XmlValue':
+                        $state = $this->changeMode($state, self::MODE_TRANSIENT);
+                        $currentValue = $metadata->getValueElement();
+                        if (!empty($currentValue)) {
+                            throw AnnotationException::semanticalError(
+                                'Cannot set more than one field of complex element as XmlValue'
+                            );
+                        }
+                        $metadata->setValueElement($property->getName());
+                        break;
 
-                        default:
-                            if ($annotation instanceof XmlAnnotation) {
-                                throw AnnotationException::semanticalError(
-                                    get_class($annotation) . ' not expected as property annotation'
-                                );
-                            }
-                            break;
-                    }
+                    default:
+echo __METHOD__ . ':' . __LINE__ . " - $className\n";
+print_r($annotation);
+                        if ($annotation instanceof XmlAnnotation) {
+                            throw AnnotationException::semanticalError(
+                                $className . ' not expected as property annotation'
+                            );
+                        }
+                        break;
                 }
             }
 
             if ($state === self::MODE_EMPTY) {
-                $metadata->addElement($property->getName(), $this->getDefaultElement($property));
+                $metadata->addElement(
+                    $property->getName(),
+                    $this->getDefaultElement($property)
+                );
             }
         }
 
@@ -178,42 +217,15 @@ print_r($annotations);
     }
 
     /**
+     * @param \PAXB\Xml\Binding\Structure\Element $element
      * @param \ReflectionProperty $property
-     * @return Element
-     */
-    public function getDefaultElement($property)
-    {
-        return new Element($property->getName(), Element::FIELD_SOURCE);
-    }
-
-    /**
-     * @param Element $element
-     * @param \ReflectionProperty $property
-     * @return Element
-     */
-    public function getCurrentElement($element, $property)
-    {
-        if (is_null($element)) {
-            $element = $this->getDefaultElement($property);
-        }
-
-        return $element;
-    }
-
-    /**
-     * @param Element $element
-     * @param \ReflectionProperty $property
-     * @param XmlElement $annotation
-     * @return Element
+     * @param \PAXB\Xml\Binding\Annotations\XmlElement $annotation
+     * @return \PAXB\Xml\Binding\Structure\Element
      * @throws \Doctrine\Common\Annotations\AnnotationException
      */
-    private function processElementAnnotation($element, $property, $annotation)
+    private function processElementAnnotation(Element $element, ReflectionProperty $property, XmlElement $annotation)
     {
-        $element = $this->getCurrentElement($element, $property);
-
-        if (!empty($annotation->name)) {
-            $element->setName($annotation->name);
-        }
+        !empty($annotation->name) && $element->setName($annotation->name);
 
         if (!empty($annotation->type)) {
             if (!class_exists($annotation->type)) {
@@ -228,13 +240,13 @@ print_r($annotations);
     }
 
     /**
-     * @param XmlElementWrapper $annotation
-     * @param Element $element
+     * @param \PAXB\Xml\Binding\Structure\Element $element
      * @param \ReflectionProperty $property
-     * @return Element
+     * @param \PAXB\Xml\Binding\Annotations\XmlElementWrapper $annotation
+     * @return \PAXB\Xml\Binding\Structure\Element
      * @throws \Doctrine\Common\Annotations\AnnotationException
      */
-    private function processElementWrapperAnnotation($annotation, $element, $property)
+    private function processElementWrapperAnnotation(Element $element, ReflectionProperty $property, XmlElementWrapper $annotation)
     {
         if (empty($annotation->name)) {
             throw AnnotationException::semanticalError(
@@ -242,24 +254,18 @@ print_r($annotations);
             );
         }
 
-        $element = $this->getCurrentElement($element, $property);
-        $element->setWrapperName($annotation->name);
-
-        return $element;
+        return $element->setWrapperName($annotation->name);
     }
 
     /**
      * @param \ReflectionProperty $property
-     * @param XmlAttribute $annotation
-     * @return Attribute
+     * @param \PAXB\Xml\Binding\Annotations\XmlAttribute $annotation
+     * @return \PAXB\Xml\Binding\Structure\Attribute
      */
-    private function processAttribute($property, $annotation)
+    private function processAttribute(ReflectionProperty $property, XmlAttribute $annotation)
     {
         $attribute = new Attribute($property->getName(), Attribute::FIELD_SOURCE);
-        if (!empty($annotation->name)) {
-            $attribute->setName($annotation->name);
-        }
-
+        !empty($annotation->name) && $attribute->setName($annotation->name);
         return $attribute;
     }
 }

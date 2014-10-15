@@ -4,6 +4,7 @@ namespace PAXB\Xml\Binding\Annotations;
 
 /**
  * @Annotation
+ * @Target({"PROPERTY", "METHOD"})
  */
 class XmlElement extends XmlAnnotation
 {
