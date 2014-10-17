@@ -33,7 +33,7 @@ class MetadataFactory implements MetadataFactoryInterface
      * @param string $className
      * @return \PAXB\Xml\Binding\Metadata\Metadata
      */
-    public function getClassMetadata($className)
+    public function getMetadata($className)
     {
         $cacheKey = self::CACHE_PREFIX . md5($className);
         $metadata = ($this->cache !== null) ? $this->cache->fetch($cacheKey) : null;

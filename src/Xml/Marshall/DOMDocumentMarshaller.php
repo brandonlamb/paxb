@@ -16,7 +16,7 @@ class DOMDocumentMarshaller implements MarshallerInterface
     private $metadataFactory;
 
     /**
-     * @param \PAXB\Xml\Binding\Metadata\MetadataFactory $metadataFactory
+     * @param \PAXB\Xml\Binding\Metadata\MetadataFactoryInterface $metadataFactory
      */
     public function __construct(MetadataFactoryInterface $metadataFactory)
     {
@@ -51,7 +51,7 @@ class DOMDocumentMarshaller implements MarshallerInterface
             throw new Exception('Cannot marshall primitive types or arrays');
         }
 
-        $metadata = $this->metadataFactory->getClassMetadata(get_class($object));
+        $metadata = $this->metadataFactory->getMetadata(get_class($object));
 #d(__METHOD__, $metadata);
 
         $rootElementName = is_null($parentLevelName) ? $metadata->getName() : $parentLevelName;
@@ -192,6 +192,7 @@ class DOMDocumentMarshaller implements MarshallerInterface
             $elementValue = $nestedValue;
 
         }
+
         if ($elementMetadata->getType() == Metadata::DEFINED_TYPE && !empty($elementValue)) {
             if (!is_object($elementValue) || get_class($elementValue) !== $elementMetadata->getTypeValue()) {
                 throw new Exception(

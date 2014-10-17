@@ -2,8 +2,11 @@
 
 namespace PAXB\Xml\Unmarshall;
 
-use PAXB\Xml\Binding\Metadata\ClassMetadata;
-use PAXB\Xml\Binding\Metadata\ClassMetadataFactory;
+use DOMDocument;
+use DOMElement;
+use ReflectionProperty;
+use PAXB\Xml\Binding\Metadata\Metadata;
+use PAXB\Xml\Binding\Metadata\MetadataFactoryInterface;
 use PAXB\Xml\Binding\Structure\Attribute;
 use PAXB\Xml\Binding\Structure\Base;
 use PAXB\Xml\Binding\Structure\Element;
@@ -11,16 +14,15 @@ use PAXB\Xml\Binding\Structure\Element;
 class DOMDocumentUnmarshaller implements UnmarshallerInterface
 {
     /**
-     * @var ClassMetadataFactory
+     * @var \PAXB\Xml\Binding\Metadata\MetadataFactoryInterface
      */
-    private $classMetadataFactory;
+    private $metadataFactory;
 
     /**
-     * @param ClassMetadataFactory $classMetadataFactory
+     * @param \PAXB\Xml\Binding\Metadata\MetadataFactoryInterface $metadataFactory
      */
-    public function __construct(ClassMetadataFactory $classMetadataFactory)
-    {
-        $this->classMetadataFactory = $classMetadataFactory;
+    public function __construct(MetadataFactoryInterface $metadataFactory)    {
+        $this->metadataFactory = $metadataFactory;
     }
 
     /**
@@ -30,29 +32,40 @@ class DOMDocumentUnmarshaller implements UnmarshallerInterface
      */
     public function unmarshall($string, $rootClass)
     {
-        $document = new \DOMDocument();
+        $document = new DOMDocument();
         $document->loadXML($string);
 
-        $classMetadata = $this->classMetadataFactory->getClassMetadata($rootClass);
-        $rootElementName = $classMetadata->getName();
+        $metadata = $this->metadataFactory->getMetadata($rootClass);
+        $rootElementName = $metadata->getName();
 
         if ($document->childNodes->item(0)->nodeName !== $rootElementName) {
             throw new Exception('Cannot found root element: '.$rootElementName);
         }
 
-        return $this->unmarshallObject($document->childNodes->item(0), $this->getNewEntity($classMetadata), $classMetadata);
+        return $this->unmarshallObject($document->childNodes->item(0), $this->getNewEntity($metadata), $metadata);
+    }
+
+    /**
+     * @param \PAXB\Xml\Binding\Metadata\Metadata $metadata
+     * @return object
+     */
+    public function getNewEntity(Metadata $metadata)
+    {
+        $className = $metadata->getClassName();
+        $object = new $className();
+        return $object;
     }
 
     /**
      * @param \DOMElement $node
      * @param mixed $object
-     * @param ClassMetadata $classMetadata
+     * @param \PAXB\Xml\Binding\Metadata\Metadata $metadata
      */
-    private function unmarshallObject(\DOMElement $node, $object, ClassMetadata $classMetadata)
+    private function unmarshallObject(DOMElement $node, $object, Metadata $metadata)
     {
-        $this->processAttributes($node, $object, $classMetadata);
-        $this->processElements($node, $classMetadata, $object);
-        $this->processValue($node, $object, $classMetadata);
+        $this->processAttributes($node, $object, $metadata);
+        $this->processElements($node, $metadata, $object);
+        $this->processValue($node, $object, $metadata);
 
         return $object;
     }
@@ -60,20 +73,20 @@ class DOMDocumentUnmarshaller implements UnmarshallerInterface
     /**
      * @param \DOMElement $node
      * @param mixed $object
-     * @param ClassMetadata $classMetadata
+     * @param \PAXB\Xml\Binding\Metadata\Metadata $metadata
      * @throws Exception
      */
-    private function processAttributes(\DOMElement $node, $object, ClassMetadata $classMetadata)
+    private function processAttributes(DOMElement $node, $object, Metadata $metadata)
     {
         /** @var Attribute $attribute */
-        foreach ($classMetadata->getAttributes() as $fieldName => $attribute) {
+        foreach ($metadata->getAttributes() as $fieldName => $attribute) {
             if (!$node->hasAttribute($attribute->getName())) {
                 throw new Exception('Cannot found attribute ' . $attribute->getName(
-                ) . ' of node ' . $classMetadata->getName());
+                ) . ' of node ' . $metadata->getName());
             }
 
             $this->setPropertyValue(
-                $classMetadata->getReflection()->getProperty($fieldName),
+                $metadata->getReflection()->getProperty($fieldName),
                 $attribute,
                 $object,
                 $node->getAttribute($attribute->getName())
@@ -83,14 +96,14 @@ class DOMDocumentUnmarshaller implements UnmarshallerInterface
 
     /**
      * @param \DOMElement $node
-     * @param ClassMetadata $classMetadata
+     * @param \PAXB\Xml\Binding\Metadata\Metadata $metadata
      * @param mixed $object
      * @throws Exception
      */
-    private function processElements(\DOMElement $node, ClassMetadata $classMetadata, $object)
+    private function processElements(DOMElement $node, Metadata $metadata, $object)
     {
         /** @var Element $element */
-        foreach ($classMetadata->getElements() as $fieldName => $element) {
+        foreach ($metadata->getElements() as $fieldName => $element) {
 
 echo __METHOD__ . ':' . __LINE__ . ": fieldName: $fieldName\n";
 
@@ -114,18 +127,18 @@ echo __METHOD__ . ':' . __LINE__ . ": filterChildNodes\n";
 #print_r($childNodes);
             }
 
-            $this->attachChildNodesToObject($object, $classMetadata, $childNodes, $element, $fieldName);
+            $this->attachChildNodesToObject($object, $metadata, $childNodes, $element, $fieldName);
         }
     }
 
     /**
      * @param \DOMElement $node
      * @param mixed $object
-     * @param ClassMetadata $classMetadata
+     * @param \PAXB\Xml\Binding\Metadata\Metadata $metadata
      */
-    private function processValue(\DOMElement $node, $object, ClassMetadata $classMetadata)
+    private function processValue(DOMElement $node, $object, Metadata $metadata)
     {
-        $valueElement = $classMetadata->getValueElement();
+        $valueElement = $metadata->getValueElement();
         if (!empty($valueElement)) {
             $fieldValue = '';
             foreach ($node->childNodes as $childNode) {
@@ -134,7 +147,7 @@ echo __METHOD__ . ':' . __LINE__ . ": filterChildNodes\n";
                 }
             }
 
-            $property = $classMetadata->getReflection()->getProperty($valueElement);
+            $property = $metadata->getReflection()->getProperty($valueElement);
             $property->setAccessible(true);
             $property->setValue($object, $fieldValue);
         }
@@ -142,18 +155,18 @@ echo __METHOD__ . ':' . __LINE__ . ": filterChildNodes\n";
 
     /**
      * @param \ReflectionProperty $property
-     * @param Base $baseMetadata
+     * @param \PAXB\Xml\Binding\Structure\Base $baseMetadata
      * @param mixed $object
      * @param mixed $value
      * @return mixed
      */
-    private function setPropertyValue(\ReflectionProperty $property, Base $baseMetadata, $object, $value)
+    private function setPropertyValue(ReflectionProperty $property, Base $baseMetadata, $object, $value)
     {
         if ($baseMetadata->getSource() == Base::FIELD_SOURCE) {
             $property->setAccessible(true);
             $property->setValue($object, $value);
         } else {
-echo __METHOD__ . ':' . __LINE__ . "\n";
+echo __METHOD__ . ':' . __LINE__ . " - call setter\n";
             $object->{'set' . ucfirst($property->getName())}($value);
         }
     }
@@ -163,7 +176,7 @@ echo __METHOD__ . ':' . __LINE__ . "\n";
      * @param string $childName
      * @return \DOMElement[]
      */
-    private function filterChildNodes(\DOMElement $node, $childName)
+    private function filterChildNodes(DOMElement $node, $childName)
     {
         $result = [];
         if ($node->hasChildNodes()) {
@@ -183,7 +196,7 @@ echo __METHOD__ . ':' . __LINE__ . "\n";
      * @param string $childName
      * @return bool
      */
-    private function hasChild(\DOMElement $node, $childName)
+    private function hasChild(DOMElement $node, $childName)
     {
         if ($node->hasChildNodes()) {
             // \DOMElement $childNode
@@ -198,33 +211,22 @@ echo __METHOD__ . ':' . __LINE__ . "\n";
     }
 
     /**
-     * @param ClassMetadata $classMetadata
-     * @return object
-     */
-    public function getNewEntity(ClassMetadata $classMetadata)
-    {
-        $className = $classMetadata->getClassName();
-        $object = new $className();
-        return $object;
-    }
-
-    /**
-     * @param Element $element
+     * @param \PAXB\Xml\Binding\Structure\Element $element
      * @param \DOMElement $child
      * @return mixed
      * @throws Exception
      */
-    private function getNodeElementValue($element, $child)
+    private function getNodeElementValue(Element $element, DOMElement $child)
     {
         $fieldValue = null;
-        if ($element->getType() === ClassMetadata::RUNTIME_TYPE) {
+        if ($element->getType() === Metadata::RUNTIME_TYPE) {
             $fieldValue = $this->getScalarValueFromNode($element->getName(), $child);
         } else {
-            $childClassMetadata = $this->classMetadataFactory->getClassMetadata($element->getTypeValue());
+            $childMetadata = $this->metadataFactory->getMetadata($element->getTypeValue());
             $fieldValue = $this->unmarshallObject(
                 $child,
-                $this->getNewEntity($childClassMetadata),
-                $childClassMetadata
+                $this->getNewEntity($childMetadata),
+                $childMetadata
             );
         }
 
@@ -233,17 +235,17 @@ echo __METHOD__ . ':' . __LINE__ . "\n";
 
     /**
      * @param mixed $object
-     * @param ClassMetadata $classMetadata
+     * @param \PAXB\Xml\Binding\Metadata\Metadata $metadata
      * @param \DOMElement[] $childNodes
-     * @param Element $element
+     * @param \PAXB\Xml\Binding\Structure\Element $element
      * @param string $fieldName
      * @return mixed
      */
     private function attachChildNodesToObject(
         $object,
-        ClassMetadata $classMetadata,
+        Metadata $metadata,
         $childNodes,
-        $element,
+        Element $element,
         $fieldName
     ) {
         if (count($childNodes) > 0) {
@@ -264,7 +266,7 @@ echo __METHOD__ . ':' . __LINE__ . ": childNodes > 0\n";
 echo __METHOD__ . ':' . __LINE__ . ": fieldValue: $fieldValue\n";
 
             $this->setPropertyValue(
-                $classMetadata->getReflection()->getProperty($fieldName),
+                $metadata->getReflection()->getProperty($fieldName),
                 $element,
                 $object,
                 $fieldValue
@@ -282,7 +284,7 @@ echo __METHOD__ . ':' . __LINE__ . ": fieldValue: $fieldValue\n";
      * @return mixed
      * @throws Exception
      */
-    private function getScalarValueFromNode($elementName, $child)
+    private function getScalarValueFromNode($elementName, DOMElement $child)
     {
         if ($child->hasChildNodes()) {
             if (count($child->childNodes)>1 || !($child->childNodes->item(0) instanceof \DOMText)) {

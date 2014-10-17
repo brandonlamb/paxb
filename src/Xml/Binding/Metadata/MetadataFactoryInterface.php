@@ -8,5 +8,5 @@ interface MetadataFactoryInterface
      * @param string $className
      * @return \PAXB\Xml\Binding\Metadata\Metadata
      */
-    public function getClassMetadata($className);
+    public function getMetadata($className);
 }

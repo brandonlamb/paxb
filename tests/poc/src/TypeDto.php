@@ -28,7 +28,7 @@ class TypeDto extends AbstractDto
     protected $name = '';
 
     /**
-     * @XmlValue
+     * @XmlElement
      * @var boolean
      */
     protected $isBatchable = false;
