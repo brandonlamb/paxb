@@ -88,7 +88,7 @@ class DOMDocumentMarshaller implements MarshallerInterface
         /** @var Attribute $attributeMetadata */
         foreach ($metadata->getAttributes() as $propertyName => $attributeMetadata) {
             $attributeValue = $this->getPropertyValue(
-                $metadata->getReflection()->getProperty($propertyName),
+                $metadata->getReflectionClass()->getProperty($propertyName),
                 $attributeMetadata,
                 $object
             );
@@ -115,7 +115,7 @@ class DOMDocumentMarshaller implements MarshallerInterface
         /** @var Element $elementMetadata */
         foreach ($metadata->getElements() as $propertyName => $elementMetadata) {
             $elementValue = $this->getPropertyValue(
-                $metadata->getReflection()->getProperty($propertyName),
+                $metadata->getReflectionClass()->getProperty($propertyName),
                 $elementMetadata,
                 $object
             );
@@ -137,7 +137,7 @@ class DOMDocumentMarshaller implements MarshallerInterface
     {
         $valueElement = $metadata->getValueElement();
         if (!empty($valueElement)) {
-            $property = $metadata->getReflection()->getProperty($valueElement);
+            $property = $metadata->getReflectionClass()->getProperty($valueElement);
             $property->setAccessible(true);
             $value = $property->getValue($object);
 

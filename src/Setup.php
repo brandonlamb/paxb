@@ -4,6 +4,7 @@ namespace PAXB;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\SimpleAnnotationReader;
+use Doctrine\Common\Annotations\CachedReader;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\ApcCache;
 use Doctrine\Common\Cache\Cache;
@@ -69,13 +70,19 @@ class Setup
     public static function getMetadataFactory()
     {
         if (self::$metadataFactory == null) {
-            $reader = new SimpleAnnotationReader();
-            self::loadAnnotationFiles($reader);
+            #$cache = new ApcCache;
+            $cache = new ArrayCache;
+
+            // Register annotation namespaces
+            $reader = new SimpleAnnotationReader;
+            $reader->addNamespace('PAXB\Xml\Binding\Annotations');
+            foreach (glob(__DIR__ . '/Xml/Binding/Annotations/*.php') as $annotationFile) {
+                AnnotationRegistry::registerFile($annotationFile);
+            }
 
             self::$metadataFactory = new MetadataFactory(
-                new AnnotationLoader($reader),
-                #new ApcCache()
-                new ArrayCache
+                new AnnotationLoader(new CachedReader($reader, $cache)),
+                $cache
             );
         }
 

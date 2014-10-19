@@ -4,18 +4,18 @@ namespace PAXB\Xml\Binding;
 
 use ReflectionProperty;
 use Doctrine\Common\Annotations\AnnotationException;
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\Reader;
 use PAXB\Xml\Binding\Annotations\XmlAnnotation;
 use PAXB\Xml\Binding\Annotations\XmlAttribute;
 use PAXB\Xml\Binding\Annotations\XmlElement;
 use PAXB\Xml\Binding\Annotations\XmlElementWrapper;
-use PAXB\Xml\Binding\Metadata\Metadata;
+use PAXB\Xml\Binding\Metadata\MetadataInterface;
 use PAXB\Xml\Binding\Structure\Attribute;
 use PAXB\Xml\Binding\Structure\Element;
 
 class AnnotationLoader
 {
-    const ANNOTATIONS_NAMESPACE = 'PAXB\Xml\Binding\Annotations';
     const MODE_EMPTY     = 'DEFAULT';
     const MODE_ELEMENT   = 'ELEMENT';
     const MODE_ATTRIBUTE = 'ATTRIBUTE';
@@ -31,17 +31,19 @@ class AnnotationLoader
      * Annotation loader constructor
      *
      * @param \Doctrine\Common\Annotations\Reader $reader
+     * @param array $namespaces
+     * @TODO Better way to load annotations?
      */
-    public function __construct(Reader $reader)
+    public function __construct(Reader $reader, array $namespaces = [])
     {
         $this->reader = $reader;
     }
 
     /**
-     * @param \PAXB\Xml\Binding\Metadata\Metadata $metadata
-     * @return \PAXB\Xml\Binding\Metadata\Metadata
+     * @param \PAXB\Xml\Binding\Metadata\MetadataInterface $metadata
+     * @return \PAXB\Xml\Binding\Metadata\MetadataInterface
      */
-    public function loadClassMetadata(Metadata $metadata)
+    public function loadClassMetadata(MetadataInterface $metadata)
     {
         $this->processClassAnnotations($metadata);
         #$this->processMethodAnnotations($metadata);
@@ -71,13 +73,13 @@ class AnnotationLoader
     }
 
     /**
-     * @param \PAXB\Xml\Binding\Metadata\Metadata $metadata
-     * @return \PAXB\Xml\Binding\Metadata\Metadata
+     * @param \PAXB\Xml\Binding\Metadata\MetadataInterface $metadata
+     * @return \PAXB\Xml\Binding\Metadata\MetadataInterface
      * @throws \Doctrine\Common\Annotations\AnnotationException
      */
-    private function processClassAnnotations(Metadata $metadata)
+    private function processClassAnnotations(MetadataInterface $metadata)
     {
-        $annotations = $this->reader->getClassAnnotations($metadata->getReflection());
+        $annotations = $this->reader->getClassAnnotations($metadata->getReflectionClass());
         $classTokens = explode('\\', $metadata->getClassName());
 
         // set default name
@@ -105,15 +107,15 @@ class AnnotationLoader
     }
 
     /**
-     * @param \PAXB\Xml\Binding\Metadata\Metadata $metadata
-     * @return \PAXB\Xml\Binding\Metadata\Metadata
+     * @param \PAXB\Xml\Binding\Metadata\MetadataInterface $metadata
+     * @return \PAXB\Xml\Binding\Metadata\MetadataInterface
      * @throws \Doctrine\Common\Annotations\AnnotationException
      */
-    private function processPropertyAnnotations(Metadata $metadata)
+    private function processPropertyAnnotations(MetadataInterface $metadata)
     {
-#d(__METHOD__, $metadata->getReflection()->getProperties());
+#d(__METHOD__, $metadata->getReflectionClass()->getProperties());
 
-        foreach ($metadata->getReflection()->getProperties() as &$property) {
+        foreach ($metadata->getReflectionClass()->getProperties() as &$property) {
             $element = null;
             $attribute = null;
             $state = self::MODE_EMPTY;

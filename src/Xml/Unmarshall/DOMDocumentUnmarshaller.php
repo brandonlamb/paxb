@@ -86,7 +86,7 @@ class DOMDocumentUnmarshaller implements UnmarshallerInterface
             }
 
             $this->setPropertyValue(
-                $metadata->getReflection()->getProperty($fieldName),
+                $metadata->getReflectionClass()->getProperty($fieldName),
                 $attribute,
                 $object,
                 $node->getAttribute($attribute->getName())
@@ -147,7 +147,7 @@ echo __METHOD__ . ':' . __LINE__ . ": filterChildNodes\n";
                 }
             }
 
-            $property = $metadata->getReflection()->getProperty($valueElement);
+            $property = $metadata->getReflectionClass()->getProperty($valueElement);
             $property->setAccessible(true);
             $property->setValue($object, $fieldValue);
         }
@@ -266,7 +266,7 @@ echo __METHOD__ . ':' . __LINE__ . ": childNodes > 0\n";
 echo __METHOD__ . ':' . __LINE__ . ": fieldValue: $fieldValue\n";
 
             $this->setPropertyValue(
-                $metadata->getReflection()->getProperty($fieldName),
+                $metadata->getReflectionClass()->getProperty($fieldName),
                 $element,
                 $object,
                 $fieldValue
