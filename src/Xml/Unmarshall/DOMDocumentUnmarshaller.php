@@ -6,7 +6,7 @@ use DOMDocument;
 use DOMElement;
 use ReflectionProperty;
 use PAXB\Xml\Binding\Metadata\Metadata;
-use PAXB\Xml\Binding\Metadata\MetadataFactoryInterface;
+use PAXB\Xml\Binding\Metadata\FactoryInterface;
 use PAXB\Xml\Binding\Structure\Attribute;
 use PAXB\Xml\Binding\Structure\Base;
 use PAXB\Xml\Binding\Structure\Element;
@@ -14,14 +14,14 @@ use PAXB\Xml\Binding\Structure\Element;
 class DOMDocumentUnmarshaller implements UnmarshallerInterface
 {
     /**
-     * @var \PAXB\Xml\Binding\Metadata\MetadataFactoryInterface
+     * @var \PAXB\Xml\Binding\Metadata\FactoryInterface
      */
     private $metadataFactory;
 
     /**
-     * @param \PAXB\Xml\Binding\Metadata\MetadataFactoryInterface $metadataFactory
+     * @param \PAXB\Xml\Binding\Metadata\FactoryInterface $metadataFactory
      */
-    public function __construct(MetadataFactoryInterface $metadataFactory)    {
+    public function __construct(FactoryInterface $metadataFactory)    {
         $this->metadataFactory = $metadataFactory;
     }
 
@@ -34,8 +34,11 @@ class DOMDocumentUnmarshaller implements UnmarshallerInterface
     {
         $document = new DOMDocument();
         $document->loadXML($string);
+#d(__METHOD__, __LINE__, $this->metadataFactory);
 
+        #$metadata = $this->metadataFactory->getMetadata($rootClass);
         $metadata = $this->metadataFactory->getMetadata($rootClass);
+#d(__METHOD__, __LINE__, $metadata);
         $rootElementName = $metadata->getName();
 
         if ($document->childNodes->item(0)->nodeName !== $rootElementName) {
@@ -222,7 +225,10 @@ echo __METHOD__ . ':' . __LINE__ . " - call setter\n";
         if ($element->getType() === Metadata::RUNTIME_TYPE) {
             $fieldValue = $this->getScalarValueFromNode($element->getName(), $child);
         } else {
+#echo "\n" . __METHOD__ . ':' . __LINE__ . ' - ' . $element->getTypeValue() . "\n\n";
+#d($element);
             $childMetadata = $this->metadataFactory->getMetadata($element->getTypeValue());
+ d(__METHOD__, $childMetadata);
             $fieldValue = $this->unmarshallObject(
                 $child,
                 $this->getNewEntity($childMetadata),

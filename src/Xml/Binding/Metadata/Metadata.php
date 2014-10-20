@@ -2,6 +2,7 @@
 
 namespace PAXB\Xml\Binding\Metadata;
 
+use PAXB\Filter\Annotations\AnnotationsInterface;
 use PAXB\Filter\Rule\RuleInterface;
 use PAXB\Xml\Binding\Structure\Element;
 use ReflectionClass;
@@ -114,7 +115,7 @@ class Metadata implements MetadataInterface
     /**
      * {@inheritDoc}
      */
-    public function addPropertyRule($property, RuleInterface $rule)
+    public function addPropertyRule($property, AnnotationsInterface $rule)
     {
         if (!isset ($this->filteredProperties[$property])) {
             $this->filteredProperties[$property] = ['rules' => []];

@@ -1,0 +1,5 @@
+
+extern zend_class_entry *paxb_filter_annotations_annotationinterface_ce;
+
+ZEPHIR_INIT_CLASS(PAXB_Filter_Annotations_AnnotationInterface);
+

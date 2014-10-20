@@ -1,5 +1,5 @@
 
-namespace PAXB\Xml\Binding\Structure;
+namespace PAXB\Binding\Structure;
 
 class Base
 {

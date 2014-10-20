@@ -26,15 +26,17 @@
 
 
 
-zend_class_entry *paxb_annotations_annotation_ce;
-zend_class_entry *paxb_xml_binding_annotations_xmlannotation_ce;
-zend_class_entry *paxb_xml_binding_annotations_xmlattribute_ce;
-zend_class_entry *paxb_xml_binding_annotations_xmlelement_ce;
-zend_class_entry *paxb_xml_binding_annotations_xmlelementwrapper_ce;
-zend_class_entry *paxb_xml_binding_annotations_xmlphpcollection_ce;
-zend_class_entry *paxb_xml_binding_annotations_xmlrootelement_ce;
-zend_class_entry *paxb_xml_binding_annotations_xmltransient_ce;
-zend_class_entry *paxb_xml_binding_annotations_xmlvalue_ce;
+zend_class_entry *paxb_xml_binding_metadata_factoryinterface_ce;
+zend_class_entry *paxb_binding_annotations_loaderinterface_ce;
+zend_class_entry *paxb_filter_annotations_annotationinterface_ce;
+zend_class_entry *paxb_xml_binding_metadata_metadatainterface_ce;
+zend_class_entry *paxb_binding_structure_base_ce;
+zend_class_entry *paxb_binding_annotations_abstractloader_ce;
+zend_class_entry *paxb_binding_annotations_annotation_ce;
+zend_class_entry *paxb_binding_annotations_exception_ce;
+zend_class_entry *paxb_xml_binding_metadata_factory_ce;
+zend_class_entry *paxb_xml_binding_structure_attribute_ce;
+zend_class_entry *paxb_xml_binding_structure_element_ce;
 
 ZEND_DECLARE_MODULE_GLOBALS(paxb)
 
@@ -200,15 +202,17 @@ static PHP_MINIT_FUNCTION(paxb)
 	setlocale(LC_ALL, "C");
 #endif
 
-	ZEPHIR_INIT(PAXB_Annotations_Annotation);
-	ZEPHIR_INIT(PAXB_Xml_Binding_Annotations_XmlAnnotation);
-	ZEPHIR_INIT(PAXB_Xml_Binding_Annotations_XmlAttribute);
-	ZEPHIR_INIT(PAXB_Xml_Binding_Annotations_XmlElement);
-	ZEPHIR_INIT(PAXB_Xml_Binding_Annotations_XmlElementWrapper);
-	ZEPHIR_INIT(PAXB_Xml_Binding_Annotations_XmlPhpCollection);
-	ZEPHIR_INIT(PAXB_Xml_Binding_Annotations_XmlRootElement);
-	ZEPHIR_INIT(PAXB_Xml_Binding_Annotations_XmlTransient);
-	ZEPHIR_INIT(PAXB_Xml_Binding_Annotations_XmlValue);
+	ZEPHIR_INIT(PAXB_Xml_Binding_Metadata_FactoryInterface);
+	ZEPHIR_INIT(PAXB_Binding_Annotations_LoaderInterface);
+	ZEPHIR_INIT(PAXB_Filter_Annotations_AnnotationInterface);
+	ZEPHIR_INIT(PAXB_Xml_Binding_Metadata_MetadataInterface);
+	ZEPHIR_INIT(PAXB_Binding_Structure_Base);
+	ZEPHIR_INIT(PAXB_Binding_Annotations_AbstractLoader);
+	ZEPHIR_INIT(PAXB_Binding_Annotations_Annotation);
+	ZEPHIR_INIT(PAXB_Binding_Annotations_Exception);
+	ZEPHIR_INIT(PAXB_Xml_Binding_Metadata_Factory);
+	ZEPHIR_INIT(PAXB_Xml_Binding_Structure_Attribute);
+	ZEPHIR_INIT(PAXB_Xml_Binding_Structure_Element);
 
 #if PHP_VERSION_ID < 50500
 	setlocale(LC_ALL, old_lc_all);

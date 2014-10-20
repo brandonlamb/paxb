@@ -10,7 +10,7 @@ use Doctrine\Common\Cache\ApcCache;
 use Doctrine\Common\Cache\Cache;
 
 use PAXB\Xml\Binding\AnnotationLoader;
-use PAXB\Xml\Binding\Metadata\MetadataFactory;
+use PAXB\Xml\Binding\Metadata\Factory as MetadataFactory;
 use PAXB\Xml\Marshall\DOMDocumentMarshaller;
 use PAXB\Xml\Marshall\Marshaller;
 use PAXB\Xml\Unmarshall\DOMDocumentUnmarshaller;

@@ -1,7 +1,7 @@
 
 namespace PAXB\Xml\Binding\Metadata;
 
-interface MetadataFactoryInterface
+interface FactoryInterface
 {
     /**
      * @param string $className

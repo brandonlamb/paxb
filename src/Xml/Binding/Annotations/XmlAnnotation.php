@@ -2,7 +2,7 @@
 
 namespace PAXB\Xml\Binding\Annotations;
 
-use Doctrine\Common\Annotations\Annotation;
+use PAXB\Binding\Annotations\Annotation;
 
 /**
  * @Annotation

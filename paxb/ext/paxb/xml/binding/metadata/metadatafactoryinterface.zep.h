@@ -1,0 +1,13 @@
+
+extern zend_class_entry *paxb_xml_binding_metadata_metadatafactoryinterface_ce;
+
+ZEPHIR_INIT_CLASS(PAXB_Xml_Binding_Metadata_MetadataFactoryInterface);
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_paxb_xml_binding_metadata_metadatafactoryinterface_getmetadata, 0, 0, 1)
+	ZEND_ARG_INFO(0, className)
+ZEND_END_ARG_INFO()
+
+ZEPHIR_INIT_FUNCS(paxb_xml_binding_metadata_metadatafactoryinterface_method_entry) {
+	PHP_ABSTRACT_ME(PAXB_Xml_Binding_Metadata_MetadataFactoryInterface, getMetadata, arginfo_paxb_xml_binding_metadata_metadatafactoryinterface_getmetadata)
+  PHP_FE_END
+};

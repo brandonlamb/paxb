@@ -1,5 +1,5 @@
 
-namespace PAXB\Annotations;
+namespace PAXB\Binding\Annotations;
 
 use BadMethodCallException;
 use RuntimeException;

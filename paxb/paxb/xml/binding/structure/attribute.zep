@@ -1,6 +1,8 @@
 
 namespace PAXB\Xml\Binding\Structure;
 
+use PAXB\Binding\Structure\Base;
+
 class Attribute extends Base
 {
     /**

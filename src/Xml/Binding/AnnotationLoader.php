@@ -3,9 +3,10 @@
 namespace PAXB\Xml\Binding;
 
 use ReflectionProperty;
-use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\Reader;
+use PAXB\Binding\Annotations\AbstractLoader;
+use PAXB\Binding\Annotations\Exception as AnnotationException;
 use PAXB\Xml\Binding\Annotations\XmlAnnotation;
 use PAXB\Xml\Binding\Annotations\XmlAttribute;
 use PAXB\Xml\Binding\Annotations\XmlElement;
@@ -14,43 +15,13 @@ use PAXB\Xml\Binding\Metadata\MetadataInterface;
 use PAXB\Xml\Binding\Structure\Attribute;
 use PAXB\Xml\Binding\Structure\Element;
 
-class AnnotationLoader
+class AnnotationLoader extends AbstractLoader
 {
     const MODE_EMPTY     = 'DEFAULT';
     const MODE_ELEMENT   = 'ELEMENT';
     const MODE_ATTRIBUTE = 'ATTRIBUTE';
     const MODE_VALUE     = 'VALUE';
     const MODE_TRANSIENT = 'TRANSIENT';
-
-    /**
-     * @var Reader
-     */
-    private $reader;
-
-    /**
-     * Annotation loader constructor
-     *
-     * @param \Doctrine\Common\Annotations\Reader $reader
-     * @param array $namespaces
-     * @TODO Better way to load annotations?
-     */
-    public function __construct(Reader $reader, array $namespaces = [])
-    {
-        $this->reader = $reader;
-    }
-
-    /**
-     * @param \PAXB\Xml\Binding\Metadata\MetadataInterface $metadata
-     * @return \PAXB\Xml\Binding\Metadata\MetadataInterface
-     */
-    public function loadClassMetadata(MetadataInterface $metadata)
-    {
-        $this->processClassAnnotations($metadata);
-        #$this->processMethodAnnotations($metadata);
-        $this->processPropertyAnnotations($metadata);
-
-        return $metadata;
-    }
 
     /**
      * @param \ReflectionProperty $property
@@ -77,8 +48,10 @@ class AnnotationLoader
      * @return \PAXB\Xml\Binding\Metadata\MetadataInterface
      * @throws \Doctrine\Common\Annotations\AnnotationException
      */
-    private function processClassAnnotations(MetadataInterface $metadata)
+    protected function processClassAnnotations(MetadataInterface $metadata)
     {
+#d(__METHOD__, $metadata->getReflectionClass());
+
         $annotations = $this->reader->getClassAnnotations($metadata->getReflectionClass());
         $classTokens = explode('\\', $metadata->getClassName());
 
@@ -95,9 +68,7 @@ class AnnotationLoader
 
                 default:
                     if ($annotation instanceof XmlAnnotation) {
-                        throw AnnotationException::semanticalError(
-                            $className . ' not expected as class annotation'
-                        );
+                        throw AnnotationException($className . ' not expected as class annotation');
                     }
                     break;
             }
@@ -111,7 +82,17 @@ class AnnotationLoader
      * @return \PAXB\Xml\Binding\Metadata\MetadataInterface
      * @throws \Doctrine\Common\Annotations\AnnotationException
      */
-    private function processPropertyAnnotations(MetadataInterface $metadata)
+    protected function processMethodAnnotations(MetadataInterface $metadata)
+    {
+        return $metadata;
+    }
+
+    /**
+     * @param \PAXB\Xml\Binding\Metadata\MetadataInterface $metadata
+     * @return \PAXB\Xml\Binding\Metadata\MetadataInterface
+     * @throws \Doctrine\Common\Annotations\AnnotationException
+     */
+    protected function processPropertyAnnotations(MetadataInterface $metadata)
     {
 #d(__METHOD__, $metadata->getReflectionClass()->getProperties());
 
@@ -180,6 +161,7 @@ class AnnotationLoader
                     default:
 echo __METHOD__ . ':' . __LINE__ . " - $className\n";
 print_r($annotation);
+
                         if ($annotation instanceof XmlAnnotation) {
                             throw AnnotationException::semanticalError(
                                 $className . ' not expected as property annotation'
@@ -205,7 +187,7 @@ print_r($annotation);
      * @param string $destinationState
      * @return string
      */
-    private function changeMode($actualState, $destinationState)
+    protected function changeMode($actualState, $destinationState)
     {
         if ($actualState !== self::MODE_EMPTY) {
             if ($actualState !== self::MODE_ELEMENT || $actualState != $destinationState) {
@@ -225,7 +207,7 @@ print_r($annotation);
      * @return \PAXB\Xml\Binding\Structure\Element
      * @throws \Doctrine\Common\Annotations\AnnotationException
      */
-    private function processElementAnnotation(Element $element, ReflectionProperty $property, XmlElement $annotation)
+    protected function processElementAnnotation(Element $element, ReflectionProperty $property, XmlElement $annotation)
     {
         !empty($annotation->name) && $element->setName($annotation->name);
 
@@ -248,7 +230,7 @@ print_r($annotation);
      * @return \PAXB\Xml\Binding\Structure\Element
      * @throws \Doctrine\Common\Annotations\AnnotationException
      */
-    private function processElementWrapperAnnotation(Element $element, ReflectionProperty $property, XmlElementWrapper $annotation)
+    protected function processElementWrapperAnnotation(Element $element, ReflectionProperty $property, XmlElementWrapper $annotation)
     {
         if (empty($annotation->name)) {
             throw AnnotationException::semanticalError(
@@ -264,7 +246,7 @@ print_r($annotation);
      * @param \PAXB\Xml\Binding\Annotations\XmlAttribute $annotation
      * @return \PAXB\Xml\Binding\Structure\Attribute
      */
-    private function processAttribute(ReflectionProperty $property, XmlAttribute $annotation)
+    protected function processAttribute(ReflectionProperty $property, XmlAttribute $annotation)
     {
         $attribute = new Attribute($property->getName(), Attribute::FIELD_SOURCE);
         !empty($annotation->name) && $attribute->setName($annotation->name);
