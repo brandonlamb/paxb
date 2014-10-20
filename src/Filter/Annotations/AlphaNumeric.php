@@ -1,18 +1,14 @@
 <?php
 
-namespace PAXB\Filter\Rules;
+namespace PAXB\Filter\Annotations;
 
 /**
- * Digits Rule
- *
- * @package DMS
- * @subpackage Filter
+ * AlphaNumeric Rule (Alphanumeric)
  *
  * @Annotation
  */
-class Digits extends RegExp
+class AlphaNumeric extends RegExp
 {
-
     /**
      * Allow Whitespace or not
      *
@@ -27,5 +23,4 @@ class Digits extends RegExp
     {
         return 'allowWhitespace';
     }
-
 }

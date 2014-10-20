@@ -5,10 +5,11 @@ namespace PAXB\Xml\Unmarshall;
 use DOMDocument;
 use DOMElement;
 use ReflectionProperty;
+use PAXB\Binding\Structure\AbstractStructure;
+use PAXB\Binding\Structure\StructureInterface;
 use PAXB\Xml\Binding\Metadata\Metadata;
 use PAXB\Xml\Binding\Metadata\FactoryInterface;
 use PAXB\Xml\Binding\Structure\Attribute;
-use PAXB\Xml\Binding\Structure\Base;
 use PAXB\Xml\Binding\Structure\Element;
 
 class DOMDocumentUnmarshaller implements UnmarshallerInterface
@@ -158,14 +159,14 @@ echo __METHOD__ . ':' . __LINE__ . ": filterChildNodes\n";
 
     /**
      * @param \ReflectionProperty $property
-     * @param \PAXB\Xml\Binding\Structure\Base $baseMetadata
+     * @param \PAXB\Xml\Binding\Structure\StructureInterface $baseMetadata
      * @param mixed $object
      * @param mixed $value
      * @return mixed
      */
-    private function setPropertyValue(ReflectionProperty $property, Base $baseMetadata, $object, $value)
+    private function setPropertyValue(ReflectionProperty $property, StructureInterface $baseMetadata, $object, $value)
     {
-        if ($baseMetadata->getSource() == Base::FIELD_SOURCE) {
+        if ($baseMetadata->getSource() == AbstractStructure::FIELD_SOURCE) {
             $property->setAccessible(true);
             $property->setValue($object, $value);
         } else {

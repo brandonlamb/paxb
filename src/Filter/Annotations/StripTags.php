@@ -1,23 +1,20 @@
 <?php
 
-namespace PAXB\Filter\Rules;
+namespace PAXB\Filter\Annotations;
 
 /**
  * StripTags Rule
  *
- * @package DMS
- * @subpackage Filter
- *
  * @Annotation
  */
-class StripTags extends Rule
+class StripTags extends AbstarctAnnotation
 {
     /**
      * String of allowed tags. Ex: <b><i><a>
      *
      * @var string
      */
-    public $allowed = null;
+    public $allowed;
 
     /**
      * {@inheritDoc}

@@ -1,31 +1,29 @@
 <?php
-namespace PAXB\Filter\Rules;
+
+namespace PAXB\Filter\Annotations;
 
 /**
  * PregReplace Rule
  * Replaces based on regular expression, will replace with empty if no
  * replacement is defined.
  *
- * @package DMS
- * @subpackage Filter
- *
  * @Annotation
  */
-class PregReplace extends Rule
+class PregReplace extends AbstractAnnotation
 {
     /**
      * Regular Expression to use
      *
      * @var string
      */
-    public $regexp = null;
+    public $regexp;
 
     /**
      * Replacement
      *
      * @var string
      */
-    public $replacement = "";
+    public $replacement;
 
     /**
      * {@inheritDoc}

@@ -1,16 +1,13 @@
 <?php
 
-namespace PAXB\Filter\Rules;
+namespace PAXB\Filter\Annotations;
 
 /**
- * Alnum Rule (Alphanumeric)
- *
- * @package DMS
- * @subpackage Filter
+ * Digits
  *
  * @Annotation
  */
-class Alnum extends RegExp
+class Digits extends RegExp
 {
     /**
      * Allow Whitespace or not

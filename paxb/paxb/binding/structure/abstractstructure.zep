@@ -1,11 +1,8 @@
 
 namespace PAXB\Binding\Structure;
 
-class Base
+abstract class AbstractStructure implements StructureInterface
 {
-    const GETTER_SOURCE = 1;
-    const FIELD_SOURCE  = 2;
-
     protected name = "";
     protected source = 0;
 
@@ -28,7 +25,7 @@ class Base
     /**
      * @param string $name
      */
-    public function setName(string! name) -> <Base>
+    public function setName(string! name) -> <StructureInterface>
     {
         let this->name = name;
         return this;
@@ -37,7 +34,7 @@ class Base
     /**
      * @param int $source
      */
-    public function setSource(int source) -> <Base>
+    public function setSource(int source) -> <StructureInterface>
     {
         let this->source = source;
         return this;

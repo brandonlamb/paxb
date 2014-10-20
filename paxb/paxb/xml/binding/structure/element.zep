@@ -1,10 +1,10 @@
 
 namespace PAXB\Xml\Binding\Structure;
 
-use PAXB\Binding\Structure\Base;
+use PAXB\Binding\Structure\AbstractStructure;
 use PAXB\Xml\Binding\Metadata\Metadata;
 
-class Element extends Base
+class Element extends AbstractStructure
 {
     /**
      * @var int

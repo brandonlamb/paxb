@@ -2,23 +2,32 @@
 
 namespace PAXB\Xml\Marshall;
 
+use DOMDocument;
+use DOMElement;
+use DOMNode;
+use Iterator;
+use IteratorAggregate;
+use ReflectionProperty;
+
+use PAXB\Binding\Structure\AbstractStructure;
+use PAXB\Binding\Structure\StructureInterface;
+use PAXB\Xml\Binding\Metadata\FactoryInterface;
 use PAXB\Xml\Binding\Metadata\Metadata;
-use PAXB\Xml\Binding\Metadata\MetadataFactoryInterface;
+use PAXB\Xml\Binding\Metadata\MetadataInterface;
 use PAXB\Xml\Binding\Structure\Attribute;
-use PAXB\Xml\Binding\Structure\Base;
 use PAXB\Xml\Binding\Structure\Element;
 
 class DOMDocumentMarshaller implements MarshallerInterface
 {
     /**
-     * @var \PAXB\Xml\Binding\Metadata\MetadataFactoryInterface
+     * @var \PAXB\Xml\Binding\Metadata\FactoryInterface
      */
     private $metadataFactory;
 
     /**
-     * @param \PAXB\Xml\Binding\Metadata\MetadataFactoryInterface $metadataFactory
+     * @param \PAXB\Xml\Binding\Metadata\FactoryInterface $metadataFactory
      */
-    public function __construct(MetadataFactoryInterface $metadataFactory)
+    public function __construct(FactoryInterface $metadataFactory)
     {
         $this->metadataFactory = $metadataFactory;
     }
@@ -30,7 +39,7 @@ class DOMDocumentMarshaller implements MarshallerInterface
      */
     public function marshall($object, $format = false)
     {
-        $domDocument = new \DOMDocument();
+        $domDocument = new DOMDocument();
         $domDocument->formatOutput = $format;
         $domDocument->preserveWhiteSpace = $format;
 
@@ -45,14 +54,14 @@ class DOMDocumentMarshaller implements MarshallerInterface
      * @return \DOMDocument
      * @throws Exception
      */
-    private function marshallObject(\DOMDocument $document, $object, $parent = null, $parentLevelName = null)
+    private function marshallObject(DOMDocument $document, $object, DOMElement $parent = null, $parentLevelName = null)
     {
         if (!is_object($object)) {
             throw new Exception('Cannot marshall primitive types or arrays');
         }
 
         $metadata = $this->metadataFactory->getMetadata(get_class($object));
-#d(__METHOD__, $metadata);
+d(__METHOD__, $metadata);
 
         $rootElementName = is_null($parentLevelName) ? $metadata->getName() : $parentLevelName;
 #d(__METHOD__, $rootElementName);
@@ -79,11 +88,11 @@ class DOMDocumentMarshaller implements MarshallerInterface
 
     /**
      * @param mixed $object
-     * @param \PAXB\Xml\Binding\Metadata\Metadata $metadata
+     * @param \PAXB\Xml\Binding\Metadata\MetadataInterface $metadata
      * @param \DOMElement $element
      * @throws Exception
      */
-    private function processAttributes($object, $metadata, $element)
+    private function processAttributes($object, MetadataInterface $metadata, DOMElement $element)
     {
         /** @var Attribute $attributeMetadata */
         foreach ($metadata->getAttributes() as $propertyName => $attributeMetadata) {
@@ -107,10 +116,10 @@ class DOMDocumentMarshaller implements MarshallerInterface
     /**
      * @param \DOMDocument $document
      * @param mixed $object
-     * @param \PAXB\Xml\Binding\Metadata\Metadata $metadata
+     * @param \PAXB\Xml\Binding\Metadata\MetadataInterface $metadata
      * @param \DOMNode $element
      */
-    private function processSubElements(\DOMDocument $document, $object, $metadata, $element)
+    private function processSubElements(DOMDocument $document, $object, MetadataInterface $metadata, DOMNode $element)
     {
         /** @var Element $elementMetadata */
         foreach ($metadata->getElements() as $propertyName => $elementMetadata) {
@@ -129,11 +138,11 @@ class DOMDocumentMarshaller implements MarshallerInterface
     /**
      * @param \DOMDocument $document
      * @param mixed $object
-     * @param \PAXB\Xml\Binding\Metadata\Metadata $metadata
+     * @param \PAXB\Xml\Binding\Metadata\MetadataInterface $metadata
      * @param \DOMElement $element
      * @throws Exception
      */
-    private function processValueElement(\DOMDocument $document, $object, $metadata, $element)
+    private function processValueElement(DOMDocument $document, $object, MetadataInterface $metadata, DOMElement $element)
     {
         $valueElement = $metadata->getValueElement();
         if (!empty($valueElement)) {
@@ -157,13 +166,13 @@ class DOMDocumentMarshaller implements MarshallerInterface
 
     /**
      * @param \ReflectionProperty $property
-     * @param Base $baseMetadata
+     * @param StructureInterface $baseMetadata
      * @param mixed $object
      * @return mixed
      */
-    private function getPropertyValue(\ReflectionProperty $property, Base $baseMetadata, $object)
+    private function getPropertyValue(ReflectionProperty $property, StructureInterface $baseMetadata, $object)
     {
-        if ($baseMetadata->getSource() == Base::FIELD_SOURCE) {
+        if ($baseMetadata->getSource() == AbstractStructure::FIELD_SOURCE) {
             $property->setAccessible(true);
             $value = $property->getValue($object);
         } else {
@@ -209,7 +218,7 @@ class DOMDocumentMarshaller implements MarshallerInterface
      * @param Element $elementMetadata
      * @param \DOMElement $element
      */
-    private function createAndAppendChild(\DOMDocument $document, $elementValue, $elementMetadata, $element)
+    private function createAndAppendChild(DOMDocument $document, $elementValue, Element $elementMetadata, DOMElement $element)
     {
         $baseElement = $element;
         $elementWrapper = $elementMetadata->getWrapperName();
@@ -234,7 +243,7 @@ class DOMDocumentMarshaller implements MarshallerInterface
      * @param Element $elementMetadata
      * @param \DOMElement $element
      */
-    private function createSubElement(\DOMDocument $document, $elementValue, $elementMetadata, $element)
+    private function createSubElement(DOMDocument $document, $elementValue, Element $elementMetadata, DOMElement $element)
     {
         if (is_object($elementValue)) {
             $this->marshallObject($document, $elementValue, $element, $elementMetadata->getName());
@@ -255,7 +264,7 @@ class DOMDocumentMarshaller implements MarshallerInterface
     private function isTraversable($elementValue)
     {
         return is_array($elementValue)
-            || $elementValue instanceof \Iterator
-            || $elementValue instanceof \IteratorAggregate;
+            || $elementValue instanceof Iterator
+            || $elementValue instanceof IteratorAggregate;
     }
 }

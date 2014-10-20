@@ -1,6 +1,6 @@
 <?php
 
-namespace PAXB\Filter\Rules;
+namespace PAXB\Filter\Annotations;
 
 use PAXB\Filter\Exception\InvalidOptionsException;
 use PAXB\Filter\Exception\MissingOptionsException;
@@ -11,12 +11,8 @@ use PAXB\Filter\Exception\RuleDefinitionException;
  *
  * Rules are classes that define the metadata supported by
  * each filter and are used to annotate objects.
- *
- * @package DMS
- * @subpackage Filter
- * @category Rule
  */
-abstract class AbstractRule implements RuleInterface
+abstract class AbstractAnnotation implements AnnotationInterface
 {
     /**
      * Initializes the filter rule with its options

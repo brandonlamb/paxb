@@ -1,5 +1,6 @@
 <?php
-namespace PAXB\Filter\Rules;
+
+namespace PAXB\Filter\Annotations;
 
 /**
  * Zend Rule
@@ -8,7 +9,7 @@ namespace PAXB\Filter\Rules;
  *
  * @Annotation
  */
-class Zend extends Rule
+class Zend extends AbstractAnnotation
 {
     /**
      * Zend\Filter class, can be either a FQN or just Boolean for example
@@ -22,7 +23,7 @@ class Zend extends Rule
      *
      * @var array
      */
-    public $zendOptions = array();
+    public $zendOptions = [];
 
     /**
      * {@inheritDoc}

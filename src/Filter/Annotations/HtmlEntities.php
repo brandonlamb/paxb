@@ -1,15 +1,13 @@
 <?php
-namespace PAXB\Filter\Rules;
+
+namespace PAXB\Filter\Annotations;
 
 /**
  * Html Entities Filter
  *
- * @package DMS
- * @subpackage Filter
- *
  * @Annotation
  */
-class HtmlEntities extends Rule
+class HtmlEntities extends AbstractAnnotation
 {
     /**
      * Flags
@@ -31,5 +29,4 @@ class HtmlEntities extends Rule
      * @var bool
      */
     public $doubleEncode = true;
-
 }

@@ -1,18 +1,14 @@
 <?php
 
-namespace PAXB\Filter\Rules;
+namespace PAXB\Filter\Annotations;
 
 /**
  * Alpha Rule
- *
- * @package DMS
- * @subpackage Filter
  *
  * @Annotation
  */
 class Alpha extends RegExp
 {
-
     /**
      * Allow Whitespace or not
      *
@@ -27,5 +23,4 @@ class Alpha extends RegExp
     {
         return 'allowWhitespace';
     }
-
 }

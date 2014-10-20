@@ -1,23 +1,20 @@
 <?php
 
-namespace PAXB\Filter\Rules;
+namespace PAXB\Filter\Annotations;
 
 /**
  * ToUpper Rule
  *
- * @package DMS
- * @subpackage Filter
- *
  * @Annotation
  */
-class ToUpper extends Rule
+class ToUpper extends AbstractAnnotation
 {
     /**
      * Encoding to be used
      *
      * @var string
      */
-    public $encoding = null;
+    public $encoding;
 
     /**
      * {@inheritDoc}

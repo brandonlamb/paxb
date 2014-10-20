@@ -1,23 +1,20 @@
 <?php
 
-namespace PAXB\Filter\Rules;
+namespace PAXB\Filter\Annotations;
 
 /**
  * Trim Rule
  *
- * @package DMS
- * @subpackage Filter
- *
  * @Annotation
  */
-class Trim extends Rule
+class Trim extends AbstractAnnotation
 {
     /**
      * Comma separated string of allowed tags
      *
      * @var string
      */
-    public $charlist = null;
+    public $charlist;
 
     /**
      * {@inheritDoc}

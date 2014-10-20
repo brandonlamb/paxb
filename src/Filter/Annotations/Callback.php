@@ -1,4 +1,5 @@
 <?php
+
 namespace PAXB\Filter\Rules;
 
 use Closure;
@@ -9,7 +10,7 @@ use PAXB\Filter\Exception\InvalidCallbackException;
  *
  * @Annotation
  */
-class Callback extends Rule
+class Callback extends AbstractAnnotation
 {
     const SELF_METHOD_TYPE = 'self_method';
     const CALLABLE_TYPE    = 'callable';
@@ -23,7 +24,7 @@ class Callback extends Rule
      *
      * @var string
      */
-    public $callback = null;
+    public $callback;
 
     /**
      * {@inheritDoc}

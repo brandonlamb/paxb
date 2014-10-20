@@ -1,9 +1,9 @@
 
 namespace PAXB\Xml\Binding\Structure;
 
-use PAXB\Binding\Structure\Base;
+use PAXB\Binding\Structure\AbstractStructure;
 
-class Attribute extends Base
+class Attribute extends AbstractStructure
 {
     /**
      * Constructor

@@ -3,8 +3,7 @@
 namespace PAXB\Xml\Binding;
 
 use ReflectionProperty;
-use Doctrine\Common\Annotations\AnnotationRegistry;
-use Doctrine\Common\Annotations\Reader;
+
 use PAXB\Binding\Annotations\AbstractLoader;
 use PAXB\Binding\Annotations\Exception as AnnotationException;
 use PAXB\Xml\Binding\Annotations\XmlAnnotation;
@@ -68,7 +67,7 @@ class AnnotationLoader extends AbstractLoader
 
                 default:
                     if ($annotation instanceof XmlAnnotation) {
-                        throw AnnotationException($className . ' not expected as class annotation');
+                        throw new AnnotationException($className . ' not expected as class annotation');
                     }
                     break;
             }
@@ -163,7 +162,7 @@ echo __METHOD__ . ':' . __LINE__ . " - $className\n";
 print_r($annotation);
 
                         if ($annotation instanceof XmlAnnotation) {
-                            throw AnnotationException::semanticalError(
+                            throw new AnnotationException(
                                 $className . ' not expected as property annotation'
                             );
                         }
@@ -191,7 +190,7 @@ print_r($annotation);
     {
         if ($actualState !== self::MODE_EMPTY) {
             if ($actualState !== self::MODE_ELEMENT || $actualState != $destinationState) {
-                throw AnnotationException::semanticalError(
+                throw new AnnotationException(
                     'Cannot use simultaneous '. $actualState.', ' . $destinationState. ' annotations '
                 );
             }
@@ -233,7 +232,7 @@ print_r($annotation);
     protected function processElementWrapperAnnotation(Element $element, ReflectionProperty $property, XmlElementWrapper $annotation)
     {
         if (empty($annotation->name)) {
-            throw AnnotationException::semanticalError(
+            throw new AnnotationException(
                 'Cannot use XmlElementWrapper without name'
             );
         }

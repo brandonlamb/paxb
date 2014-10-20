@@ -1,18 +1,15 @@
 <?php
 
-namespace PAXB\Filter\Rules;
+namespace PAXB\Filter\Annotations;
 
 /**
  * RegExp Rule
  *
  * Filter using preg_replace and unicode or non-unicode patterns
  *
- * @package DMS
- * @subpackage Filter
- *
  * @Annotation
  */
-class RegExp extends Rule
+class RegExp extends AbstractAnnotation
 {
     /**
      * Unicode version of Pattern

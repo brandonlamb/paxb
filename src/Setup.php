@@ -43,7 +43,8 @@ class Setup
     {
         if (self::$marshaller == null) {
             self::$marshaller = new DOMDocumentMarshaller(
-                self::getMetadataFactory()
+                self::getMetadataFactory(),
+                true
             );
         }
 
