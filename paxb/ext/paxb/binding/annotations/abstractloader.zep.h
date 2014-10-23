@@ -15,19 +15,19 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_paxb_binding_annotations_abstractloader___constru
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_paxb_binding_annotations_abstractloader_processmetadata, 0, 0, 1)
-	ZEND_ARG_OBJ_INFO(0, metadata, PAXB\\Xml\\Binding\\Metadata\\MetadataInterface, 0)
+	ZEND_ARG_OBJ_INFO(0, metadata, PAXB\\Binding\\Metadata\\MetadataInterface, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_paxb_binding_annotations_abstractloader_processclassannotations, 0, 0, 1)
-	ZEND_ARG_OBJ_INFO(0, metadata, PAXB\\Xml\\Binding\\Metadata\\MetadataInterface, 0)
+	ZEND_ARG_OBJ_INFO(0, metadata, PAXB\\Binding\\Metadata\\MetadataInterface, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_paxb_binding_annotations_abstractloader_processmethodannotations, 0, 0, 1)
-	ZEND_ARG_OBJ_INFO(0, metadata, PAXB\\Xml\\Binding\\Metadata\\MetadataInterface, 0)
+	ZEND_ARG_OBJ_INFO(0, metadata, PAXB\\Binding\\Metadata\\MetadataInterface, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_paxb_binding_annotations_abstractloader_processpropertyannotations, 0, 0, 1)
-	ZEND_ARG_OBJ_INFO(0, metadata, PAXB\\Xml\\Binding\\Metadata\\MetadataInterface, 0)
+	ZEND_ARG_OBJ_INFO(0, metadata, PAXB\\Binding\\Metadata\\MetadataInterface, 0)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(paxb_binding_annotations_abstractloader_method_entry) {

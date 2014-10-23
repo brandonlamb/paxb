@@ -39,8 +39,8 @@ class Element extends AbstractStructure
     public function __construct(string! name, int source, int type = null, string! typeValue = "", string! wrapperName = null, boolean phpCollection = false)
     {
         let this->name = name;
-        //let this->type = (typeof type == "null") ? Metadata::RUNTIME_TYPE : type;
-        let this->type = (typeof type == "null") ? 1 : type;
+        let this->type = (typeof type == "null") ? Metadata::RUNTIME_TYPE : type;
+        // let this->type = (typeof type == "null") ? 1 : type;
         let this->typeValue = typeValue;
         let this->source = source;
         let this->wrapperName = wrapperName;
@@ -63,8 +63,8 @@ class Element extends AbstractStructure
      */
     public function setTypeValue(string! typeValue) -> <Element>
     {
-        //let this->type = Metadata::DEFINED_TYPE;
-        let this->type = 2;
+        let this->type = Metadata::DEFINED_TYPE;
+        // let this->type = 2;
         let this->typeValue = typeValue;
         return this;
     }

@@ -3,7 +3,6 @@ namespace PAXB\Binding\Metadata;
 
 //use Doctrine\Common\Cache\Cache;
 use PAXB\Binding\Annotations\Loader;
-use PAXB\Binding\Metadata\Container;
 
 class Factory implements FactoryInterface
 {
@@ -66,6 +65,12 @@ echo __METHOD__ . ": " . className . "\n";
 
         let metadata = this->parseMetadata(className);
         this->container->set(className, metadata);
+
+        // If cache is set, save the metadata to cache
+        if typeof this->cache == "object" {
+            this->cache->save(cacheKey, metadata);
+        }
+
         return metadata;
     }
 
@@ -75,6 +80,8 @@ echo __METHOD__ . ": " . className . "\n";
      */
     protected function parseMetadata(string! className) -> <\PAXB\Binding\Metadata\MetadataInterface>
     {
+        var metadata;
+
         // No cached metadata found, create new instance
         let metadata = new Metadata(className);
 
@@ -84,11 +91,6 @@ echo __METHOD__ . ": " . className . "\n";
 
         // Load Annotations from Reader
         this->loader->processMetadata(metadata);
-
-        // If cache is set, save the metadata to cache
-        if typeof this->cache == "object" {
-            this->cache->save(cacheKey, metadata);
-        }
 
         return metadata;
     }
@@ -104,7 +106,7 @@ echo __METHOD__ . ": " . className . "\n";
     {
         var parentClass;
 
-        let parent = metadata->getReflectionClass()->getParentClass();
+        let parentClass = metadata->getReflectionClass()->getParentClass();
 
         if typeof parentClass == "object" {
             metadata->mergeRules(this->getMetadata(parentClass->getName()));

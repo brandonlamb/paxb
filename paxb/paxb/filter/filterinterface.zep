@@ -36,7 +36,7 @@ interface FilterInterface
     /**
      * Retrieves the metadata factory for class metdatas
      *
-     * @return \PAXB\Xml\Mapping\Metadata\FactoryInterface
+     * @return \PAXB\Binding\Metadata\FactoryInterface
      */
-    public function getMetadataFactory() -> <\PAXB\Xml\Mapping\Metadata\FactoryInterface>;
+    public function getMetadataFactory() -> <\PAXB\Binding\Metadata\FactoryInterface>;
 }

@@ -1,0 +1,5 @@
+
+extern zend_class_entry *paxb_filter_exception_invalidoptionsexception_ce;
+
+ZEPHIR_INIT_CLASS(PAXB_Filter_Exception_InvalidOptionsException);
+

@@ -25,7 +25,7 @@ class Container
      * @param \PAXB\Binding\Metadata\MetadataInterface metadata
      * @return \PAXB\Binding\Metadata\Container
      */
-    public function set(string! key, <MetadataInterface> metdata) -> <Container>
+    public function set(string! key, <MetadataInterface> metadata) -> <Container>
     {
         let this->storage[key] = metadata;
         return this;

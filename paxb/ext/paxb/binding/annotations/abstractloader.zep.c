@@ -61,8 +61,8 @@ PHP_METHOD(PAXB_Binding_Annotations_AbstractLoader, __construct) {
 }
 
 /**
- * @param \PAXB\Xml\Binding\Metadata\MetadataInterface $metadata
- * @return \PAXB\Xml\Binding\Metadata\MetadataInterface
+ * @param \PAXB\Binding\Metadata\MetadataInterface $metadata
+ * @return \PAXB\Binding\Metadata\MetadataInterface
  */
 PHP_METHOD(PAXB_Binding_Annotations_AbstractLoader, processMetadata) {
 
@@ -74,8 +74,8 @@ PHP_METHOD(PAXB_Binding_Annotations_AbstractLoader, processMetadata) {
 
 
 
-	if (!(zephir_instance_of_ev(metadata, paxb_xml_binding_metadata_metadatainterface_ce TSRMLS_CC))) {
-		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(spl_ce_InvalidArgumentException, "Parameter 'metadata' must be an instance of 'PAXB\\\\Xml\\\\Binding\\\\Metadata\\\\MetadataInterface'", "", 0);
+	if (!(zephir_instance_of_ev(metadata, paxb_binding_metadata_metadatainterface_ce TSRMLS_CC))) {
+		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(spl_ce_InvalidArgumentException, "Parameter 'metadata' must be an instance of 'PAXB\\\\Binding\\\\Metadata\\\\MetadataInterface'", "", 0);
 		return;
 	}
 	ZEPHIR_CALL_METHOD(NULL, this_ptr, "processclassannotations", NULL, metadata);
@@ -90,8 +90,8 @@ PHP_METHOD(PAXB_Binding_Annotations_AbstractLoader, processMetadata) {
 }
 
 /**
- * @param \PAXB\Xml\Binding\Metadata\MetadataInterface $metadata
- * @return \PAXB\Xml\Binding\Metadata\MetadataInterface
+ * @param \PAXB\Binding\Metadata\MetadataInterface $metadata
+ * @return \PAXB\Binding\Metadata\MetadataInterface
  * @throws \Doctrine\Common\Annotations\AnnotationException
  */
 PHP_METHOD(PAXB_Binding_Annotations_AbstractLoader, processClassAnnotations) {
@@ -99,8 +99,8 @@ PHP_METHOD(PAXB_Binding_Annotations_AbstractLoader, processClassAnnotations) {
 }
 
 /**
- * @param \PAXB\Xml\Binding\Metadata\MetadataInterface $metadata
- * @return \PAXB\Xml\Binding\Metadata\MetadataInterface
+ * @param \PAXB\Binding\Metadata\MetadataInterface $metadata
+ * @return \PAXB\Binding\Metadata\MetadataInterface
  * @throws \Doctrine\Common\Annotations\AnnotationException
  */
 PHP_METHOD(PAXB_Binding_Annotations_AbstractLoader, processMethodAnnotations) {
@@ -108,8 +108,8 @@ PHP_METHOD(PAXB_Binding_Annotations_AbstractLoader, processMethodAnnotations) {
 }
 
 /**
- * @param \PAXB\Xml\Binding\Metadata\MetadataInterface $metadata
- * @return \PAXB\Xml\Binding\Metadata\MetadataInterface
+ * @param \PAXB\Binding\Metadata\MetadataInterface $metadata
+ * @return \PAXB\Binding\Metadata\MetadataInterface
  * @throws \Doctrine\Common\Annotations\AnnotationException
  */
 PHP_METHOD(PAXB_Binding_Annotations_AbstractLoader, processPropertyAnnotations) {

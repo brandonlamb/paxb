@@ -8,6 +8,7 @@ use ReflectionProperty;
 use PAXB\Binding\Structure\AbstractStructure;
 use PAXB\Binding\Structure\StructureInterface;
 use PAXB\Binding\Metadata\Metadata;
+use PAXB\Binding\Metadata\MetadataInterface;
 use PAXB\Binding\Metadata\FactoryInterface;
 use PAXB\Xml\Binding\Structure\Attribute;
 use PAXB\Xml\Binding\Structure\Element;
@@ -50,10 +51,10 @@ class DOMDocumentUnmarshaller implements UnmarshallerInterface
     }
 
     /**
-     * @param \PAXB\Binding\Metadata\Metadata $metadata
+     * @param \PAXB\Binding\Metadata\MetadataInterface $metadata
      * @return object
      */
-    public function getNewEntity(Metadata $metadata)
+    public function getNewEntity(MetadataInterface $metadata)
     {
         $className = $metadata->getClassName();
         $object = new $className();
@@ -63,9 +64,9 @@ class DOMDocumentUnmarshaller implements UnmarshallerInterface
     /**
      * @param \DOMElement $node
      * @param mixed $object
-     * @param \PAXB\Binding\Metadata\Metadata $metadata
+     * @param \PAXB\Binding\Metadata\MetadataInterface $metadata
      */
-    private function unmarshallObject(DOMElement $node, $object, Metadata $metadata)
+    private function unmarshallObject(DOMElement $node, $object, MetadataInterface $metadata)
     {
         $this->processAttributes($node, $object, $metadata);
         $this->processElements($node, $metadata, $object);
@@ -77,10 +78,10 @@ class DOMDocumentUnmarshaller implements UnmarshallerInterface
     /**
      * @param \DOMElement $node
      * @param mixed $object
-     * @param \PAXB\Binding\Metadata\Metadata $metadata
+     * @param \PAXB\Binding\Metadata\MetadataInterface $metadata
      * @throws Exception
      */
-    private function processAttributes(DOMElement $node, $object, Metadata $metadata)
+    private function processAttributes(DOMElement $node, $object, MetadataInterface $metadata)
     {
         /** @var Attribute $attribute */
         foreach ($metadata->getAttributes() as $fieldName => $attribute) {
@@ -100,11 +101,11 @@ class DOMDocumentUnmarshaller implements UnmarshallerInterface
 
     /**
      * @param \DOMElement $node
-     * @param \PAXB\Binding\Metadata\Metadata $metadata
+     * @param \PAXB\Binding\Metadata\MetadataInterface $metadata
      * @param mixed $object
      * @throws Exception
      */
-    private function processElements(DOMElement $node, Metadata $metadata, $object)
+    private function processElements(DOMElement $node, MetadataInterface $metadata, $object)
     {
         /** @var Element $element */
         foreach ($metadata->getElements() as $fieldName => $element) {
@@ -242,7 +243,7 @@ echo __METHOD__ . ':' . __LINE__ . " - call setter\n";
 
     /**
      * @param mixed $object
-     * @param \PAXB\Binding\Metadata\Metadata $metadata
+     * @param \PAXB\Binding\Metadata\MetadataInterface $metadata
      * @param \DOMElement[] $childNodes
      * @param \PAXB\Xml\Binding\Structure\Element $element
      * @param string $fieldName
@@ -250,7 +251,7 @@ echo __METHOD__ . ':' . __LINE__ . " - call setter\n";
      */
     private function attachChildNodesToObject(
         $object,
-        Metadata $metadata,
+        MetadataInterface $metadata,
         $childNodes,
         Element $element,
         $fieldName

@@ -21,7 +21,7 @@
 
 ZEPHIR_INIT_CLASS(PAXB_Xml_Binding_Structure_Element) {
 
-	ZEPHIR_REGISTER_CLASS_EX(PAXB\\Xml\\Binding\\Structure, Element, paxb, xml_binding_structure_element, paxb_binding_structure_base_ce, paxb_xml_binding_structure_element_method_entry, 0);
+	ZEPHIR_REGISTER_CLASS_EX(PAXB\\Xml\\Binding\\Structure, Element, paxb, xml_binding_structure_element, paxb_binding_structure_abstractstructure_ce, paxb_xml_binding_structure_element_method_entry, 0);
 
 	/**
 	 * @var int

@@ -2,10 +2,11 @@
 /web/vendor/paxb/paxb/ext/kernel/object.c:1014:2: warning: second parameter of 'va_start' not last named argument [-Wvarargs]
   va_start(ap, types_length);
   ^
-/web/vendor/paxb/paxb/ext/kernel/array.c: In function 'zephir_array_update_multi':
+/web/vendor/paxb/paxb/ext/kernel/object.c: In function 'zephir_update_static_property_array_multi_ce':
 /web/vendor/paxb/paxb/ext/kernel/object.c:1656:2: warning: second parameter of 'va_start' not last named argument [-Wvarargs]
   va_start(ap, types_length);
   ^
+/web/vendor/paxb/paxb/ext/kernel/array.c: In function 'zephir_array_update_multi':
 /web/vendor/paxb/paxb/ext/kernel/array.c:1274:2: warning: second parameter of 'va_start' not last named argument [-Wvarargs]
   va_start(ap, types_length);
   ^

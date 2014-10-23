@@ -53,7 +53,7 @@ class Annotation
      * @param mixed value Property value.
      * @throws \BadMethodCallException
      */
-    public function __set(string! name, var value)
+    public function __set(string! name, var value) -> void
     {
         throw new BadMethodCallException(
             sprintf("Unknown property '%s' on annotation '%s'.", name, get_class(this))

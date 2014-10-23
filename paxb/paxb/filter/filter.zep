@@ -6,8 +6,7 @@ namespace PAXB\Filter;
  * for the object and applying them
  */
 
-use PAXB\Filter\Annotations\AnnotationInterface;
-use PAXB\Filter\Filters\Loader\FilterLoaderInterface;
+use PAXB\Annotations\Filter\AnnotationInterface;
 use PAXB\Binding\Metadata\FactoryInterface;
 
 /**
@@ -32,10 +31,10 @@ class Filter implements FilterInterface
     /**
      * Constructor
      *
-     * @param \PAXB\Xml\Mapping\Metadata\FactoryInterface $metadataFactory
-     * @param FilterLoaderInterface $filterLoader
+     * @param \PAXB\Binding\Metadata\FactoryInterface $metadataFactory
+     * @param \PAXB\Filter\LoaderInterface $filterLoader
      */
-    public function __construct(<FactoryInterface> $metadataFactory, <FilterLoaderInterface> $filterLoader)
+    public function __construct(<FactoryInterface> $metadataFactory, <LoaderInterface> $filterLoader)
     {
         let this->metadataFactory = metadataFactory;
         let this->filterLoader    = filterLoader;
@@ -117,13 +116,13 @@ class Filter implements FilterInterface
      */
     protected function walkRuleChain(var value, array rules)
     {
-        var rule, filter, value;
+        var rule, filter, newValue;
 
         for rule in rules {
             let filter = this->filterLoader->getFilterForRule(rule);
-            let value = filter->apply(rule, value);
+            let newValue = filter->apply(rule, value);
         }
 
-        return value;
+        return newValue;
     }
 }

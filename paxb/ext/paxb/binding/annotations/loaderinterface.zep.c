@@ -21,8 +21,8 @@ ZEPHIR_INIT_CLASS(PAXB_Binding_Annotations_LoaderInterface) {
 }
 
 /**
- * @param \PAXB\Xml\Binding\Metadata\MetadataInterface $metadata
- * @return \PAXB\Xml\Binding\Metadata\MetadataInterface
+ * @param \PAXB\Binding\Metadata\MetadataInterface $metadata
+ * @return \PAXB\Binding\Metadata\MetadataInterface
  */
 ZEPHIR_DOC_METHOD(PAXB_Binding_Annotations_LoaderInterface, processMetadata);
 
