@@ -10,7 +10,7 @@ function bench()
         'Included files' => count(get_included_files()),
     ));
     echo "\n$data\n";
-    #print_r(get_included_files());
+    print_r(get_included_files());
     echo "\n";
 }
 

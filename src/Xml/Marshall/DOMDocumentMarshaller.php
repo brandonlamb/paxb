@@ -61,6 +61,7 @@ class DOMDocumentMarshaller implements MarshallerInterface
         }
 
         $metadata = $this->metadataFactory->getMetadata(get_class($object));
+d(__METHOD__, __LINE__);
 d(__METHOD__, $metadata);
 
         $rootElementName = is_null($parentLevelName) ? $metadata->getName() : $parentLevelName;

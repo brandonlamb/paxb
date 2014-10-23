@@ -19,7 +19,7 @@ $entity = new Api\TypeDto([
     'isBatchable' => true,
     'checkPhysical' => false,
 ]);
-echo \PAXB\Setup::getMarshaller()->marshall($entity, true);
+$response = \PAXB\Setup::getMarshaller()->marshall($entity, true);
 
 /*
 $xml = file_get_contents('type.xml');

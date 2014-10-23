@@ -81,12 +81,15 @@ class Setup
             $reader->addNamespace('PAXB\Binding\Annotations\Filter');
             $reader->addNamespace('PAXB\Binding\Annotations\Xml');
 
-            foreach (glob(__DIR__ . '/Binding/Annotations/Filter/*.php') as $annotationFile) {
-                AnnotationRegistry::registerFile($annotationFile);
-            }
-            foreach (glob(__DIR__ . '/Binding/Annotations/Xml/*.php') as $annotationFile) {
-                AnnotationRegistry::registerFile($annotationFile);
-            }
+            AnnotationRegistry::registerFile(__DIR__ . '/Binding/Annotations/Filter/PAXBAnnotations.php');
+            AnnotationRegistry::registerFile(__DIR__ . '/Binding/Annotations/Xml/PAXBAnnotations.php');
+
+            // foreach (glob(__DIR__ . '/Binding/Annotations/Filter/*.php') as $annotationFile) {
+            //     AnnotationRegistry::registerFile($annotationFile);
+            // }
+            // foreach (glob(__DIR__ . '/Binding/Annotations/Xml/*.php') as $annotationFile) {
+            //     AnnotationRegistry::registerFile($annotationFile);
+            // }
 
             self::$metadataFactory = new MetadataFactory(
                 new AnnotationLoader(
@@ -99,16 +102,5 @@ class Setup
         }
 
         return self::$metadataFactory;
-    }
-
-    /**
-     * @param SimpleAnnotationReader $reader
-     */
-    private static function loadAnnotationFiles(SimpleAnnotationReader $reader)
-    {
-        $reader->addNamespace(AnnotationLoader::ANNOTATIONS_NAMESPACE);
-        foreach (glob(__DIR__ . '/Xml/Binding/Annotations/*.php') as $annotationFile) {
-            AnnotationRegistry::registerFile($annotationFile);
-        }
     }
 }

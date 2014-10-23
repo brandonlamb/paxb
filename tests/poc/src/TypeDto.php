@@ -10,6 +10,8 @@
 
 namespace Api;
 
+use PAXB\Binding\Annotations\Filter;
+
 /**
  * @XmlRootElement(name="type")
  */
@@ -29,24 +31,28 @@ class TypeDto extends AbstractDto
 
     /**
      * @XmlElement
+     * @Filter\Boolean
      * @var boolean
      */
     protected $isBatchable = false;
 
     /**
      * @XmlElement
+     * @Filter\Boolean
      * @var boolean
      */
     protected $checkPhysical = false;
 
     /**
      * @XmlElement
+     * @Filter\Boolean
      * @var boolean
      */
     protected $checkReceiptDate = false;
 
     /**
      * @XmlElement
+     * @Filter\Boolean
      * @var boolean
      */
     protected $isIncludedInHistory = false;

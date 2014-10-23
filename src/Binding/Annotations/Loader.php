@@ -95,13 +95,6 @@ class Loader extends AbstractLoader
                     $this->xmlLoader->processMethodAnnotation($annotation, $metadata);
                 }
             }
-
-            if ($state === self::MODE_EMPTY) {
-                $metadata->addElement(
-                    $property->getName(),
-                    $this->getDefaultElement($property)
-                );
-            }
         }
 
         return $metadata;
@@ -114,24 +107,23 @@ class Loader extends AbstractLoader
      */
     protected function processPropertyAnnotations(MetadataInterface $metadata)
     {
-#d(__METHOD__, $metadata->getReflectionClass()->getProperties());
-
         foreach ($metadata->getReflectionClass()->getProperties() as &$property) {
             $element = null;
             $attribute = null;
             $state = self::MODE_EMPTY;
 
             $annotations = $this->reader->getPropertyAnnotations($property);
-#print_r($annotations);
 
             foreach ($annotations as &$annotation) {
                 if ($annotation instanceof FilterAnnotation) {
+echo __METHOD__ . ':' . __LINE__ . ' - ' . get_class($annotation) . "\n";
+
                     #$this->filterLoader->processPropertyAnnotation($annotation, $metadata);
                     $metadata->addPropertyRule($property->getName(), $annotation);
                 }
 
                 if ($annotation instanceof XmlAnnotation) {
-                    $this->xmlLoader->processPropertyAnnotation($annotation, $metadata);
+                    $this->xmlLoader->processPropertyAnnotation($property, $annotation, $metadata);
                 }
             }
 
