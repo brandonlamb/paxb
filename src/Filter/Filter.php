@@ -13,7 +13,7 @@ namespace PAXB\Filter;
 
 use PAXB\Filter\Filters\Loader\FilterLoaderInterface;
 use PAXB\Filter\Rules\RuleInterface;
-use PAXB\Xml\Binding\Metadata\MetadataFactoryInterface;
+use PAXB\Binding\Metadata\FactoryInterface;
 
 /**
  * Class Filter

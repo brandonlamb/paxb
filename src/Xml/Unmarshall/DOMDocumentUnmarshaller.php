@@ -7,20 +7,20 @@ use DOMElement;
 use ReflectionProperty;
 use PAXB\Binding\Structure\AbstractStructure;
 use PAXB\Binding\Structure\StructureInterface;
-use PAXB\Xml\Binding\Metadata\Metadata;
-use PAXB\Xml\Binding\Metadata\FactoryInterface;
+use PAXB\Binding\Metadata\Metadata;
+use PAXB\Binding\Metadata\FactoryInterface;
 use PAXB\Xml\Binding\Structure\Attribute;
 use PAXB\Xml\Binding\Structure\Element;
 
 class DOMDocumentUnmarshaller implements UnmarshallerInterface
 {
     /**
-     * @var \PAXB\Xml\Binding\Metadata\FactoryInterface
+     * @var \PAXB\Binding\Metadata\FactoryInterface
      */
     private $metadataFactory;
 
     /**
-     * @param \PAXB\Xml\Binding\Metadata\FactoryInterface $metadataFactory
+     * @param \PAXB\Binding\Metadata\FactoryInterface $metadataFactory
      */
     public function __construct(FactoryInterface $metadataFactory)    {
         $this->metadataFactory = $metadataFactory;
@@ -50,7 +50,7 @@ class DOMDocumentUnmarshaller implements UnmarshallerInterface
     }
 
     /**
-     * @param \PAXB\Xml\Binding\Metadata\Metadata $metadata
+     * @param \PAXB\Binding\Metadata\Metadata $metadata
      * @return object
      */
     public function getNewEntity(Metadata $metadata)
@@ -63,7 +63,7 @@ class DOMDocumentUnmarshaller implements UnmarshallerInterface
     /**
      * @param \DOMElement $node
      * @param mixed $object
-     * @param \PAXB\Xml\Binding\Metadata\Metadata $metadata
+     * @param \PAXB\Binding\Metadata\Metadata $metadata
      */
     private function unmarshallObject(DOMElement $node, $object, Metadata $metadata)
     {
@@ -77,7 +77,7 @@ class DOMDocumentUnmarshaller implements UnmarshallerInterface
     /**
      * @param \DOMElement $node
      * @param mixed $object
-     * @param \PAXB\Xml\Binding\Metadata\Metadata $metadata
+     * @param \PAXB\Binding\Metadata\Metadata $metadata
      * @throws Exception
      */
     private function processAttributes(DOMElement $node, $object, Metadata $metadata)
@@ -100,7 +100,7 @@ class DOMDocumentUnmarshaller implements UnmarshallerInterface
 
     /**
      * @param \DOMElement $node
-     * @param \PAXB\Xml\Binding\Metadata\Metadata $metadata
+     * @param \PAXB\Binding\Metadata\Metadata $metadata
      * @param mixed $object
      * @throws Exception
      */
@@ -138,7 +138,7 @@ echo __METHOD__ . ':' . __LINE__ . ": filterChildNodes\n";
     /**
      * @param \DOMElement $node
      * @param mixed $object
-     * @param \PAXB\Xml\Binding\Metadata\Metadata $metadata
+     * @param \PAXB\Binding\Metadata\Metadata $metadata
      */
     private function processValue(DOMElement $node, $object, Metadata $metadata)
     {
@@ -242,7 +242,7 @@ echo __METHOD__ . ':' . __LINE__ . " - call setter\n";
 
     /**
      * @param mixed $object
-     * @param \PAXB\Xml\Binding\Metadata\Metadata $metadata
+     * @param \PAXB\Binding\Metadata\Metadata $metadata
      * @param \DOMElement[] $childNodes
      * @param \PAXB\Xml\Binding\Structure\Element $element
      * @param string $fieldName

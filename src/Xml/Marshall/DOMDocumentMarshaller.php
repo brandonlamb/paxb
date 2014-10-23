@@ -11,21 +11,21 @@ use ReflectionProperty;
 
 use PAXB\Binding\Structure\AbstractStructure;
 use PAXB\Binding\Structure\StructureInterface;
-use PAXB\Xml\Binding\Metadata\FactoryInterface;
-use PAXB\Xml\Binding\Metadata\Metadata;
-use PAXB\Xml\Binding\Metadata\MetadataInterface;
+use PAXB\Binding\Metadata\FactoryInterface;
+use PAXB\Binding\Metadata\Metadata;
+use PAXB\Binding\Metadata\MetadataInterface;
 use PAXB\Xml\Binding\Structure\Attribute;
 use PAXB\Xml\Binding\Structure\Element;
 
 class DOMDocumentMarshaller implements MarshallerInterface
 {
     /**
-     * @var \PAXB\Xml\Binding\Metadata\FactoryInterface
+     * @var \PAXB\Binding\Metadata\FactoryInterface
      */
     private $metadataFactory;
 
     /**
-     * @param \PAXB\Xml\Binding\Metadata\FactoryInterface $metadataFactory
+     * @param \PAXB\Binding\Metadata\FactoryInterface $metadataFactory
      */
     public function __construct(FactoryInterface $metadataFactory)
     {
@@ -88,7 +88,7 @@ d(__METHOD__, $metadata);
 
     /**
      * @param mixed $object
-     * @param \PAXB\Xml\Binding\Metadata\MetadataInterface $metadata
+     * @param \PAXB\Binding\Metadata\MetadataInterface $metadata
      * @param \DOMElement $element
      * @throws Exception
      */
@@ -116,7 +116,7 @@ d(__METHOD__, $metadata);
     /**
      * @param \DOMDocument $document
      * @param mixed $object
-     * @param \PAXB\Xml\Binding\Metadata\MetadataInterface $metadata
+     * @param \PAXB\Binding\Metadata\MetadataInterface $metadata
      * @param \DOMNode $element
      */
     private function processSubElements(DOMDocument $document, $object, MetadataInterface $metadata, DOMNode $element)
@@ -138,7 +138,7 @@ d(__METHOD__, $metadata);
     /**
      * @param \DOMDocument $document
      * @param mixed $object
-     * @param \PAXB\Xml\Binding\Metadata\MetadataInterface $metadata
+     * @param \PAXB\Binding\Metadata\MetadataInterface $metadata
      * @param \DOMElement $element
      * @throws Exception
      */

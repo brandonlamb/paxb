@@ -1,12 +1,15 @@
 <?php
 
-namespace PAXB\Xml\Binding\Metadata;
+namespace PAXB\Binding\Metadata;
 
 use PAXB\Filter\Annotations\AnnotationsInterface;
 use PAXB\Filter\Rule\RuleInterface;
 use PAXB\Xml\Binding\Structure\Element;
 use ReflectionClass;
 
+/**
+ * @deprecated for zephir implementation
+ */
 class Metadata implements MetadataInterface
 {
     const RUNTIME_TYPE   = 1;
@@ -83,7 +86,7 @@ class Metadata implements MetadataInterface
     }
 
     /**
-     * @return \PAXB\Xml\Binding\Metadata\Element[]
+     * @return \PAXB\Binding\Metadata\Element[]
      */
     public function getElements()
     {

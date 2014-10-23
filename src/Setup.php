@@ -9,8 +9,10 @@ use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\ApcCache;
 use Doctrine\Common\Cache\Cache;
 
-use PAXB\Xml\Binding\AnnotationLoader;
-use PAXB\Xml\Binding\Metadata\Factory as MetadataFactory;
+use PAXB\Binding\Annotations\Loader;
+use PAXB\Binding\Annotations\Loader\XmlLoader;
+use PAXB\Binding\Metadata\Container;
+use PAXB\Binding\Metadata\Factory as MetadataFactory;
 use PAXB\Xml\Marshall\DOMDocumentMarshaller;
 use PAXB\Xml\Marshall\Marshaller;
 use PAXB\Xml\Unmarshall\DOMDocumentUnmarshaller;
@@ -22,7 +24,7 @@ use PAXB\Xml\Unmarshall\Unmarshaller;
 class Setup
 {
     /**
-     * @var \PAXB\Xml\Binding\Metadata\MetadataFactoryInterface
+     * @var \PAXB\Binding\Metadata\FactoryInterface
      */
     private static $metadataFactory;
 
@@ -66,7 +68,7 @@ class Setup
     }
 
     /**
-     * @return \PAXB\Xml\Binding\Metadata\MetadataFactory
+     * @return \PAXB\Binding\Metadata\MetadataFactory
      */
     public static function getMetadataFactory()
     {
@@ -82,7 +84,10 @@ class Setup
             }
 
             self::$metadataFactory = new MetadataFactory(
-                new AnnotationLoader(new CachedReader($reader, $cache)),
+                new AnnotationLoader(
+                    new CachedReader($reader, $cache),
+                    new XmlLoader()),
+                new Container(),
                 $cache
             );
         }

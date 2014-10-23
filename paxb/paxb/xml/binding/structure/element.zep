@@ -2,7 +2,7 @@
 namespace PAXB\Xml\Binding\Structure;
 
 use PAXB\Binding\Structure\AbstractStructure;
-use PAXB\Xml\Binding\Metadata\Metadata;
+use PAXB\Binding\Metadata\Metadata;
 
 class Element extends AbstractStructure
 {

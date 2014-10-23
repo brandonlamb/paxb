@@ -3,7 +3,7 @@
  * Interface for methods required by a Metadata class
  */
 
-namespace PAXB\Xml\Binding\Metadata;
+namespace PAXB\Binding\Metadata;
 
 use PAXB\Filter\Annotations\AnnotationsInterface;
 
@@ -24,7 +24,7 @@ interface MetadataInterface
      * @param AnnotationsInterface $rule
      * @return MetadataInterface
      */
-    public function addPropertyRule(string! property, <AnnotationsInterface> rule) -> <\PAXB\Xml\Binding\MetadataInterface>;
+    public function addPropertyRule(string! property, <AnnotationsInterface> rule) -> <\PAXB\Binding\MetadataInterface>;
 
     /**
      * Retrieve s list of filtering rules attached to a property
@@ -40,7 +40,7 @@ interface MetadataInterface
      * @param MetadataInterface $metadata
      * @return MetadataInterface
      */
-    public function mergeRules(<MetadataInterface> metadata) -> <\PAXB\Xml\Binding\MetadataInterface>;
+    public function mergeRules(<MetadataInterface> metadata) -> <\PAXB\Binding\MetadataInterface>;
 
     /**
      * Get name of class represented in this Metadata object

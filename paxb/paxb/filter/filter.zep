@@ -8,7 +8,7 @@ namespace PAXB\Filter;
 
 use PAXB\Filter\Annotations\AnnotationInterface;
 use PAXB\Filter\Filters\Loader\FilterLoaderInterface;
-use PAXB\Xml\Binding\Metadata\FactoryInterface;
+use PAXB\Binding\Metadata\FactoryInterface;
 
 /**
  * Class Filter
@@ -74,7 +74,7 @@ class Filter implements FilterInterface
     /**
      * {@inheritDoc}
      */
-    public function getMetadataFactory() -> <\PAXB\Xml\Binding\Metadata\FactoryInterface>
+    public function getMetadataFactory() -> <\PAXB\Binding\Metadata\FactoryInterface>
     {
         return this->metadataFactory;
     }

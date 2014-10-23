@@ -1,13 +1,13 @@
 
 namespace PAXB\Binding\Annotations;
 
-use PAXB\Xml\Binding\Metadata\MetadataInterface;
+use PAXB\Binding\Metadata\MetadataInterface;
 
 interface LoaderInterface
 {
     /**
-     * @param \PAXB\Xml\Binding\Metadata\MetadataInterface $metadata
-     * @return \PAXB\Xml\Binding\Metadata\MetadataInterface
+     * @param \PAXB\Binding\Metadata\MetadataInterface $metadata
+     * @return \PAXB\Binding\Metadata\MetadataInterface
      */
-    public function processMetadata(<MetadataInterface> metadata) -> <\PAXB\Xml\Binding\Metadata\MetadataInterface>;
+    public function processMetadata(<MetadataInterface> metadata) -> <\PAXB\Binding\Metadata\MetadataInterface>;
 }

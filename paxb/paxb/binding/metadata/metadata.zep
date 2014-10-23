@@ -1,5 +1,5 @@
 
-namespace PAXB\Xml\Binding\Metadata;
+namespace PAXB\Binding\Metadata;
 
 use PAXB\Filter\Annotations\AnnotationsInterface;
 use PAXB\Filter\Rule\RuleInterface;
@@ -93,7 +93,7 @@ class Metadata implements MetadataInterface
     }
 
     /**
-     * @return \PAXB\Xml\Binding\Metadata\Element[]
+     * @return \PAXB\Binding\Metadata\Element[]
      */
     public function getElements() -> array
     {
@@ -145,7 +145,7 @@ class Metadata implements MetadataInterface
     /**
      * {@inheritDoc}
      */
-    public function addPropertyRule(string! property, <AnnotationsInterface> rule) -> <\PAXB\Xml\Binding\MetadataInterface>
+    public function addPropertyRule(string! property, <AnnotationsInterface> rule) -> <\PAXB\Binding\MetadataInterface>
     {
         if !isset this->filteredProperties[property] {
             let this->filteredProperties[property] = ["rules": []];
@@ -159,7 +159,7 @@ class Metadata implements MetadataInterface
     /**
      * {@inheritDoc}
      */
-    public function mergeRules(<MetadataInterface> metadata) -> <\PAXB\Xml\Binding\MetadataInterface>
+    public function mergeRules(<MetadataInterface> metadata) -> <\PAXB\Binding\MetadataInterface>
     {
         var property, rule;
 
@@ -175,9 +175,9 @@ class Metadata implements MetadataInterface
     /**
      * @param string $fieldName
      * @param \PAXB\Xml\Binding\Structure\Attribute $attribute
-     * @return \PAXB\Xml\Binding\MetadataInterface
+     * @return \PAXB\Binding\MetadataInterface
      */
-    public function addAttributes(string! fieldName, <Attribute> attribute) -> <\PAXB\Xml\Binding\MetadataInterface>
+    public function addAttributes(string! fieldName, <Attribute> attribute) -> <\PAXB\Binding\MetadataInterface>
     {
         let this->attributes[fieldName] = attribute;
         return this;
@@ -186,9 +186,9 @@ class Metadata implements MetadataInterface
     /**
      * @param string $fieldName
      * @param \PAXB\Xml\Binding\Structure\Element $element
-     * @return \PAXB\Xml\Binding\MetadataInterface
+     * @return \PAXB\Binding\MetadataInterface
      */
-    public function addElement(string! fieldName, <Element> element) -> <\PAXB\Xml\Binding\MetadataInterface>
+    public function addElement(string! fieldName, <Element> element) -> <\PAXB\Binding\MetadataInterface>
     {
         let this->elements[fieldName] = element;
         return this;
@@ -196,9 +196,9 @@ class Metadata implements MetadataInterface
 
     /**
      * @param string $name
-     * @return \PAXB\Xml\Binding\MetadataInterface
+     * @return \PAXB\Binding\MetadataInterface
      */
-    public function setName(string! name) -> <\PAXB\Xml\Binding\MetadataInterface>
+    public function setName(string! name) -> <\PAXB\Binding\MetadataInterface>
     {
         let this->name = trim(name);
         return this;
@@ -206,9 +206,9 @@ class Metadata implements MetadataInterface
 
     /**
      * @param string $valueElement
-     * @return \PAXB\Xml\Binding\MetadataInterface
+     * @return \PAXB\Binding\MetadataInterface
      */
-    public function setValueElement(string! valueElement) -> <\PAXB\Xml\Binding\MetadataInterface>
+    public function setValueElement(string! valueElement) -> <\PAXB\Binding\MetadataInterface>
     {
         let this->valueElement = trim(valueElement);
         return this;

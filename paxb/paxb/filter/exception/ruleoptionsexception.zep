@@ -1,20 +1,15 @@
-<?php
 
 namespace PAXB\Filter\Exception;
 
 /**
  * Base Exception for errors with rule options
- *
- * @package DMS
- * @subpackage Filter
- * @category Exception
  */
 class RuleOptionsException extends FilterException
 {
     /**
      * @var array
      */
-    private $options = [];
+    private options;
 
     /**
      * Constructor
@@ -22,10 +17,10 @@ class RuleOptionsException extends FilterException
      * @param string $message
      * @param array $options
      */
-    public function __construct($message, array $options)
+    public function __construct(string! message, array options)
     {
-        parent::__construct($message);
-        $this->options = $options;
+        parent::__construct(message);
+        let this->options = options;
     }
 
     /**
@@ -33,8 +28,8 @@ class RuleOptionsException extends FilterException
      *
      * @return array
      */
-    public function getOptions()
+    public function getOptions() -> array
     {
-        return (array) $this->options;
+        return this->options;
     }
 }

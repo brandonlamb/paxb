@@ -2,7 +2,7 @@
 namespace PAXB\Binding\Annotations;
 
 //use Doctrine\Common\Annotations\Reader;
-use PAXB\Xml\Binding\Metadata\MetadataInterface;
+use PAXB\Binding\Metadata\MetadataInterface;
 
 abstract class AbstractLoader
 {
@@ -24,10 +24,10 @@ abstract class AbstractLoader
     }
 
     /**
-     * @param \PAXB\Xml\Binding\Metadata\MetadataInterface $metadata
-     * @return \PAXB\Xml\Binding\Metadata\MetadataInterface
+     * @param \PAXB\Binding\Metadata\MetadataInterface $metadata
+     * @return \PAXB\Binding\Metadata\MetadataInterface
      */
-    public function processMetadata(<MetadataInterface> metadata) -> <\PAXB\Xml\Binding\Metadata\MetadataInterface>
+    public function processMetadata(<MetadataInterface> metadata) -> <\PAXB\Binding\Metadata\MetadataInterface>
     {
         this->processClassAnnotations(metadata);
         this->processMethodAnnotations(metadata);
@@ -37,23 +37,23 @@ abstract class AbstractLoader
     }
 
     /**
-     * @param \PAXB\Xml\Binding\Metadata\MetadataInterface $metadata
-     * @return \PAXB\Xml\Binding\Metadata\MetadataInterface
+     * @param \PAXB\Binding\Metadata\MetadataInterface $metadata
+     * @return \PAXB\Binding\Metadata\MetadataInterface
      * @throws \Doctrine\Common\Annotations\AnnotationException
      */
-    abstract protected function processClassAnnotations(<MetadataInterface> metadata) -> <\PAXB\Xml\Binding\Metadata\MetadataInterface>;
+    abstract protected function processClassAnnotations(<MetadataInterface> metadata) -> <\PAXB\Binding\Metadata\MetadataInterface>;
 
     /**
-     * @param \PAXB\Xml\Binding\Metadata\MetadataInterface $metadata
-     * @return \PAXB\Xml\Binding\Metadata\MetadataInterface
+     * @param \PAXB\Binding\Metadata\MetadataInterface $metadata
+     * @return \PAXB\Binding\Metadata\MetadataInterface
      * @throws \Doctrine\Common\Annotations\AnnotationException
      */
-    abstract protected function processMethodAnnotations(<MetadataInterface> metadata) -> <\PAXB\Xml\Binding\Metadata\MetadataInterface>;
+    abstract protected function processMethodAnnotations(<MetadataInterface> metadata) -> <\PAXB\Binding\Metadata\MetadataInterface>;
 
     /**
-     * @param \PAXB\Xml\Binding\Metadata\MetadataInterface $metadata
-     * @return \PAXB\Xml\Binding\Metadata\MetadataInterface
+     * @param \PAXB\Binding\Metadata\MetadataInterface $metadata
+     * @return \PAXB\Binding\Metadata\MetadataInterface
      * @throws \Doctrine\Common\Annotations\AnnotationException
      */
-    abstract protected function processPropertyAnnotations(<MetadataInterface> metadata) -> <\PAXB\Xml\Binding\Metadata\MetadataInterface>;
+    abstract protected function processPropertyAnnotations(<MetadataInterface> metadata) -> <\PAXB\Binding\Metadata\MetadataInterface>;
 }
