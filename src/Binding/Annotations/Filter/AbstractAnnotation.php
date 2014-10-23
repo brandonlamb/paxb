@@ -1,6 +1,6 @@
 <?php
 
-namespace PAXB\Filter\Annotations;
+namespace PAXB\Binding\Annotations\Filter;
 
 use PAXB\Filter\Exception\InvalidOptionsException;
 use PAXB\Filter\Exception\MissingOptionsException;

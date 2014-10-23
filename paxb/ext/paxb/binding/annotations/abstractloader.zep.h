@@ -9,9 +9,9 @@ PHP_METHOD(PAXB_Binding_Annotations_AbstractLoader, processClassAnnotations);
 PHP_METHOD(PAXB_Binding_Annotations_AbstractLoader, processMethodAnnotations);
 PHP_METHOD(PAXB_Binding_Annotations_AbstractLoader, processPropertyAnnotations);
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_paxb_binding_annotations_abstractloader___construct, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_paxb_binding_annotations_abstractloader___construct, 0, 0, 2)
 	ZEND_ARG_INFO(0, reader)
-	ZEND_ARG_ARRAY_INFO(0, namespaces, 1)
+	ZEND_ARG_INFO(0, xmlLoader)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_paxb_binding_annotations_abstractloader_processmetadata, 0, 0, 1)

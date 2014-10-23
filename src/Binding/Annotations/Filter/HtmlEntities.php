@@ -1,6 +1,6 @@
 <?php
 
-namespace PAXB\Filter\Annotations;
+namespace PAXB\Binding\Annotations\Filter;
 
 /**
  * Html Entities Filter

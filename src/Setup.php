@@ -9,7 +9,7 @@ use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\ApcCache;
 use Doctrine\Common\Cache\Cache;
 
-use PAXB\Binding\Annotations\Loader;
+use PAXB\Binding\Annotations\Loader as AnnotationLoader;
 use PAXB\Binding\Annotations\Loader\XmlLoader;
 use PAXB\Binding\Metadata\Container;
 use PAXB\Binding\Metadata\Factory as MetadataFactory;
@@ -78,15 +78,21 @@ class Setup
 
             // Register annotation namespaces
             $reader = new SimpleAnnotationReader;
-            $reader->addNamespace('PAXB\Xml\Binding\Annotations');
-            foreach (glob(__DIR__ . '/Xml/Binding/Annotations/*.php') as $annotationFile) {
+            $reader->addNamespace('PAXB\Binding\Annotations\Filter');
+            $reader->addNamespace('PAXB\Binding\Annotations\Xml');
+
+            foreach (glob(__DIR__ . '/Binding/Annotations/Filter/*.php') as $annotationFile) {
+                AnnotationRegistry::registerFile($annotationFile);
+            }
+            foreach (glob(__DIR__ . '/Binding/Annotations/Xml/*.php') as $annotationFile) {
                 AnnotationRegistry::registerFile($annotationFile);
             }
 
             self::$metadataFactory = new MetadataFactory(
                 new AnnotationLoader(
                     new CachedReader($reader, $cache),
-                    new XmlLoader()),
+                    new XmlLoader()
+                ),
                 new Container(),
                 $cache
             );

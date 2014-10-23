@@ -1,6 +1,6 @@
 <?php
 
-namespace PAXB\Xml\Binding\Annotations;
+namespace PAXB\Binding\Annotations\Xml;
 
 /**
  * @Annotation

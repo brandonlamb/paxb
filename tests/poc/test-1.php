@@ -5,7 +5,7 @@ dl('paxb.so');
 $loader = new Phalcon\Loader;
 $loader->registerNamespaces([
     'Api' => __DIR__ . '/src/',
-    'PAXB\Xml\Binding\Annotations' => __DIR__ . '/../../src/Xml/Binding/Annotations',
+    'PAXB\Binding\Annotations\Xml' => __DIR__ . '/../../src/Binding/Annotations/Xml',
     'PAXB\Tests' => __DIR__ . '/../unit/src/',
 ]);
 $loader->register();

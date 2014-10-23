@@ -1,13 +1,13 @@
 <?php
 
-namespace PAXB\Filter\Annotations;
+namespace PAXB\Binding\Annotations\Filter;
 
 /**
  * StripTags Rule
  *
  * @Annotation
  */
-class StripTags extends AbstarctAnnotation
+class StripTags extends AbstractAnnotation
 {
     /**
      * String of allowed tags. Ex: <b><i><a>

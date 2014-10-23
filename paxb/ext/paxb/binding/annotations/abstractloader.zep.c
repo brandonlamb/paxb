@@ -14,7 +14,6 @@
 #include "kernel/main.h"
 #include "kernel/object.h"
 #include "kernel/memory.h"
-#include "kernel/operators.h"
 #include "kernel/exception.h"
 #include "kernel/fcall.h"
 
@@ -27,6 +26,11 @@ ZEPHIR_INIT_CLASS(PAXB_Binding_Annotations_AbstractLoader) {
 	 * @var \Doctrine\Common\Annotations\Reader
 	 */
 	zend_declare_property_null(paxb_binding_annotations_abstractloader_ce, SL("reader"), ZEND_ACC_PROTECTED TSRMLS_CC);
+
+	/**
+	 * @var \PAXB\Binding\Annotations\LoaderInterface
+	 */
+	zend_declare_property_null(paxb_binding_annotations_abstractloader_ce, SL("xmlLoader"), ZEND_ACC_PROTECTED TSRMLS_CC);
 
 	return SUCCESS;
 
@@ -41,22 +45,14 @@ ZEPHIR_INIT_CLASS(PAXB_Binding_Annotations_AbstractLoader) {
  */
 PHP_METHOD(PAXB_Binding_Annotations_AbstractLoader, __construct) {
 
-	zval *namespaces = NULL;
-	zval *reader, *namespaces_param = NULL;
+	zval *reader, *xmlLoader;
 
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 1, &reader, &namespaces_param);
+	zephir_fetch_params(0, 2, 0, &reader, &xmlLoader);
 
-	if (!namespaces_param) {
-		ZEPHIR_INIT_VAR(namespaces);
-		array_init(namespaces);
-	} else {
-		zephir_get_arrval(namespaces, namespaces_param);
-	}
 
 
 	zephir_update_property_this(this_ptr, SL("reader"), reader TSRMLS_CC);
-	ZEPHIR_MM_RESTORE();
+	zephir_update_property_this(this_ptr, SL("xmlLoader"), xmlLoader TSRMLS_CC);
 
 }
 

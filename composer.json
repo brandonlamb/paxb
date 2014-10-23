@@ -31,9 +31,5 @@
             "email": "brandon@brandonlamb.com",
             "role": "Developer"
         }
-    ],
-    "repositories": [
-        {"type": "composer", "url": "http://tools.retail-web-apps.starbucks.net:8080/composer-local"},
-        {"type": "composer", "url": "http://tools.retail-web-apps.starbucks.net:8080/composer-remote"}
     ]
 }

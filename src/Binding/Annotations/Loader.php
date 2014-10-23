@@ -1,6 +1,6 @@
 <?php
 
-namespace PAXB\Xml\Binding;
+namespace PAXB\Binding\Annotations;
 
 use ReflectionProperty;
 
@@ -14,7 +14,7 @@ use PAXB\Binding\Metadata\MetadataInterface;
 use PAXB\Xml\Binding\Structure\Attribute;
 use PAXB\Xml\Binding\Structure\Element;
 
-class AnnotationLoader extends AbstractLoader
+class Loader extends AbstractLoader
 {
     const MODE_EMPTY     = 'DEFAULT';
     const MODE_ELEMENT   = 'ELEMENT';

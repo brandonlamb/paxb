@@ -1,6 +1,6 @@
 <?php
 
-namespace PAXB\Filter\Rules;
+namespace PAXB\Binding\Annotations\Filter;
 
 use Closure;
 use PAXB\Filter\Exception\InvalidCallbackException;

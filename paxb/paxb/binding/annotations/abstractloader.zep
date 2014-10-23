@@ -12,15 +12,21 @@ abstract class AbstractLoader
     protected reader;
 
     /**
+     * @var \PAXB\Binding\Annotations\LoaderInterface
+     */
+    protected xmlLoader;
+
+    /**
      * Annotation loader constructor
      *
      * @param \Doctrine\Common\Annotations\Reader $reader
      * @param array $namespaces
      * @TODO Better way to load annotations?
      */
-    public function __construct(var reader, array namespaces = [])
+    public function __construct(var reader, var xmlLoader)
     {
         let this->reader = reader;
+        let this->xmlLoader = xmlLoader;
     }
 
     /**
